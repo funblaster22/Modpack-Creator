@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="profile.jpg">
+    <title>About</title>
+    <script>  // SIZE: 382 by 225
+const { shell } = require('electron')
+
+window.onload = function() {
+  document.getElementById('copyright').innerHTML = '&copy Ed 2019-' + new Date().getFullYear();
+  
+  for (var tag of document.getElementsByTagName('a')) {
+    tag.onclick = function(event) {
+      event.preventDefault();
+      shell.openExternal(this.href);
+      window.close();
+    }
+  }
+}
+    </script>
+    <style>
+/*html, body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}*/
+
+img {
+  width: 49%;
+  height: auto;
+}
+
+p {
+  margin-top: 0;
+}
+
+div {
+  padding-left: 52%;
+}
+
+ul {
+  padding-left: 1em;
+  margin-top: 0;
+}
+
+h1 {
+  text-align: center;
+  margin: 0;
+}
+    </style>
+  </head>
+  <body>
+    <img src="icons/dab.jpg" align="left" />
+    <div>
+      <h1>Auto Mod Updater</h1>
+      <p id=copyright></p>
+      Links:
+      <ul>
+        <li>Website:  <a href='http://www.funblaster22.tk/'>funblaster22.tk</a></li>
+        <li>Github:  <a href='https://www.github.com/'>Coming Soon</a></li>
+        <li>Lisence:  <a href='#'>Coming Soon</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

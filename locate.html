@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="profile.jpg">
+    <title>Locate</title>
+    <script>
+const { dialog } = require('electron').remote;
+const os = require('os');
+const find = require('find');
+const { shell } = require('electron')
+
+if (localStorage.user == null) {  // To ensure that someone doesn't distribute their exe and break program with invalid MCpath
+  localStorage.user = os.homedir();
+}
+if (localStorage.user != os.homedir()) {
+  localStorage.user = os.homedir();
+  localStorage.removeItem("MCpath");
+}
+
+window.onload = function() {
+  if (localStorage.MCpath == null) {
+    autodetect();
+  } else {
+    toggleStatus(true);
+  }
+}
+
+var platforms = {  // Windows and mac MC locations
+  'win32': process.env["APPDATA"] + '\\.minecraft',
+  'darwin': os.homedir() + '\\Library\\Application Support\\minecraft'
+};
+
+
+function autodetect() {
+  toggleStatus(false);
+  let MCpath = platforms[process.platform] || os.homedir() + '\\.minecraft';  // Select correct path for current platform || linux
+  if (MCpath === undefined) {  // Minecraft was not found
+    search(document.querySelector('button[onclick="search(event.target)"]'));  // TODO: make cleaner
+  } else {  // Minecraft was found
+    if (warnUser(MCpath))
+      localStorage.MCpath = MCpath;
+  }
+  location.reload();
+}
+
+function search(target) { console.log('searching...'); // search for .minecraft or minecraft folders
+  document.getElementById('advanced').style.display = 'initial';  // show locate button
+  target.style.display = 'none';  // TODO: show loading img
+
+  find
+  .eachdir(/minecraft$/i, os.homedir(), function(dir) {
+    var item = document.createElement('li');
+    item.innerText = dir;
+    item.onclick = function() {
+      if (warnUser(this.innerText)) {
+        localStorage.MCpath = this.innerText;
+        location.reload();
+      }
+    }
+    document.querySelector('ul').appendChild(item);
+  })
+  .end(function() {
+    console.log('find end');
+  })
+}
+
+function locate() {
+  dialog.showOpenDialog({properties: ['openDirectory']}, function (folder) { console.log(folder);
+    if (folder !== undefined && warnUser(folder[0])) {
+      localStorage.MCpath = folder;
+    }
+  });
+  location.reload();
+}
+
+function validateFolder(folder) {  // TODO
+  return true;
+}
+
+function warnUser(folder) {
+  if (!validateFolder(folder)) {  // folder not valid
+    var result = dialog.showMessageBox({
+      type: 'question',
+      message: "Are you sure this is a valid MC directory:\n" + folder,
+      title: "Confirm",
+      buttons: ['no', 'yes', 'Open in files']  // returns 1=yes, 0=no, 2=open
+    });
+    if (result != 2) return result;
+    shell.showItemInFolder(folder);
+    return 0;
+  }
+  else return true;  // folder is valid
+}
+
+function toggleStatus(isDone) {
+  document.getElementById('loading').style.display = (isDone) ? 'none' : 'initial';
+  document.getElementById('done').style.display = (isDone) ? 'initial' : 'none';
+  document.querySelector('#done > code').innerText = localStorage.MCpath;
+}
+    </script>
+    <style>
+code {
+  background-color: lightgrey;
+  padding: 5px;
+  /*round corners*/
+}
+
+p {
+  display: none;
+  font-size: 1em;
+}
+
+img {
+  height: 2em;
+}
+    </style>
+  </head>
+  <body>
+    <p id=loading><img src="infinity-loading.svg" />  Locating your Minecraft folder...</p>
+    <p id=done>Minecraft has been detected at <code>${ localStorage.MCpath }</code> <button onclick="autodetect()">Auto-detect</button> <button onclick="search(event.target)">Incorrect?</button></p>
+      <ul></ul>
+      <button onclick="locate()" style="display: none;" id=advanced>Locate</button>
+  </body>
+</html>

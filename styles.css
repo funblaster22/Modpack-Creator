@@ -1,0 +1,41 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.rounded-button {
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+.button-container {
+  text-align: right;
+  width: 100%;
+}
+
+.flex > div {
+  box-sizing: border-box;
+  border-bottom: 1px solid grey;
+  width: 100%;
+  padding: 10px;
+  line-height: 40px;
+  
+  display: flex;
+  font-size: 30px;
+  align-items: center;
+}
+
+.flex img {
+  margin-right: 10px;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px grey;
+  /*image-rendering: pixelated;*/
+}

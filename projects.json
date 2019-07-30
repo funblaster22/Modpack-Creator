@@ -1,0 +1,17 @@
+{
+  "Modcraft": {
+    "icon": "icons/grass.png"
+  },
+  "Emmy": {
+    "icon": ""
+  },
+  "Natcat": {
+    "icon": "icons/villager-house.jpg"
+  },
+  "\";alert('Youve been hacked!');//": {
+    "icon": "icons/grass.png"
+  },
+  "</span><script>alert('Youve been hacked!');</script><span>": {
+    "icon": ""
+  }
+}

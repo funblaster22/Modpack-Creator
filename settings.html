@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="profile.jpg">
+    <title>Settings</title>
+    <script>
+window.addEventListener("message", receiveMessage, false);
+var modName;
+const {dialog} = require('electron').remote;
+window.opener.postMessage('', "file://");
+
+function receiveMessage(event) { console.log(event);
+  if (event.origin !== "file://")
+    return;  // TODO: change if hosting online
+
+  modName = event.data;
+  load();
+}
+
+const fs = require('fs');
+
+function load() {
+  
+}
+    </script>
+    <style>
+html, body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.flex {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.flex > img {
+  box-sizing: border-box;
+  width: 20%;
+  margin: 2%;
+  /*image-rendering: pixelated;*/
+}
+    </style>
+  </head>
+  <body>
+    <div class=flex></div>
+  </body>
+</html>
