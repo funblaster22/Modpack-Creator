@@ -1,3 +1,8 @@
+@keyframes detail-expand {
+  from {height: 0;}
+  to {height: calc(100vh - 101px);} /* Replace with cell height */
+}
+
 html, body {
   padding: 0;
   margin: 0;
@@ -5,8 +10,7 @@ html, body {
 }
 
 .flex {
-  display: flex;
-  flex-direction: column;
+  position: absolute;
   width: 100vw;
   height: 100vh;
 }
@@ -18,7 +22,8 @@ html, body {
 
 .button-container {
   text-align: right;
-  width: 100%;
+  flex-grow: 99;
+  min-width: 100px;
 }
 
 .flex > div {
@@ -27,7 +32,7 @@ html, body {
   width: 100%;
   padding: 10px;
   line-height: 40px;
-  
+
   display: flex;
   font-size: 30px;
   align-items: center;
@@ -37,5 +42,29 @@ html, body {
   margin-right: 10px;
   cursor: pointer;
   box-shadow: 5px 5px 10px grey;
+  /*image-rendering: pixelated;*/
+}
+
+#detail {
+  width: 100%;
+  height: 100vh;
+  animation-name: detail-expand;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+/*** Styles for Icon Selector ***/
+#detail.icon-selector {
+  display: flex;
+  /*width: 100vw;
+  height: 100vh;*/
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+#detail.icon-selector > img {
+  width: 20%;
+  margin: 2%;
   /*image-rendering: pixelated;*/
 }

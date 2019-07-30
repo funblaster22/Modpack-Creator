@@ -1,6 +1,6 @@
 {
   "Modcraft": {
-    "icon": "icons/grass.png"
+    "icon": "icons/dab.jpg"
   },
   "Emmy": {
     "icon": ""
@@ -12,6 +12,6 @@
     "icon": "icons/grass.png"
   },
   "</span><script>alert('Youve been hacked!');</script><span>": {
-    "icon": ""
+    "icon": "icons/misaligned.jpg"
   }
 }

@@ -1,31 +1,22 @@
-const fs = nodeRequire('fs');
+//const fs = nodeRequire('fs');
 const electron = nodeRequire('electron');
+
+var debug;
+var selectedMod;
+var dad;
 var projects;
+var detailDiv;
 
 fs.readFile('projects.json', function(err, data) {
   projects = JSON.parse(data);
   $().ready(load);
 });
 
-var debug;
-var selectedMod;
-
 function load() {
   const flexbox = document.querySelector('.flex');
-  
+
   for (var modpackName in projects) {
-    var modpackDetails = projects[modpackName];
-    /*var cell = document.createElement('div');
-    var img = document.createElement('img');
-    img.src = modpackDetails.icon;
-    img.width = 50;
-    img.height = 50;
-    img.onclick = choosePic;
-    cell.appendChild(img);
-    //cell.innerHTML += modpackName;
-    cell.appendChild(document.createTextNode(modpackName));
-    flexbox.appendChild(cell);
-  }*/
+  var modpackDetails = projects[modpackName];
   var cell = document.getElementById("cell").content;
   cell = cell.cloneNode(true);
   cell.querySelector('span').innerText = modpackName;
@@ -37,28 +28,14 @@ function load() {
   $(`<div style="border:none;"><button class=rounded-button onclick=newModpack()>New</button></div>`).appendTo('.flex');
 }
 
-function choosePic(event) {
-  getName(event.target);
-  var iconSelector = window.open("icon-selector.html", "Icon Selector");
-}
-
 function openSettings(event) {
   getName(event.target);
-  var settingsModal = window.open("settings.html", "Settings");
-}
-
-window.addEventListener("message", receiveMessage, false);
-
-function receiveMessage(event) { console.log(event);
-  if (event.origin !== "file://")
-    return;  // TODO: change if hosting online
-
-  event.source.postMessage(selectedMod, "file://");
+  //var settingsModal = window.open("settings.html", "Settings");
 }
 
 function newModpack() {
   const prompt = nodeRequire('electron-prompt');
- 
+
   prompt({
     title: 'New Modpack',
     label: 'Name:',
@@ -83,6 +60,22 @@ function newModpack() {
   .catch(console.error);
 }
 
-function getName(elem) {
-  selectedMod = elem.parentElement.innerText.trim();
+function getName(elem) {  // elem = obj that was clicked
+  dad = elem.parentElement;  // dad = main elem containing all info for single modpack
+  while (dad.className != '') {  // b/c buttons are nested inside another div
+    console.log('up');
+    elem = dad
+    dad = elem.parentElement;
+  }
+  selectedMod = dad.innerText.trim();
+  detailDiv = document.createElement('div');
+  detailDiv.id = 'detail';
+  $(detailDiv).insertAfter(dad);
+
+  let previous = $(dad).prevAll().length;  // number of previous siblings (for animation)
+
+  $('.flex').animate({
+    top: -previous * $(dad).outerHeight() // replace with height of cell
+  }, 1000);
+  $('html').css('overflow-y', 'hidden');
 }
