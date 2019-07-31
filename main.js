@@ -1,5 +1,5 @@
-const electron = require('electron')
-const { app, BrowserWindow, Menu } = electron  //https://electronjs.org/docs/tutorial/first-app
+const electron = require('electron');
+const { app, BrowserWindow, Menu, shell } = electron;  //https://electronjs.org/docs/tutorial/first-app
 
 function createPopup (website) {
   // Create the popup window.
@@ -14,7 +14,7 @@ function createPopup (website) {
       nodeIntegration: true
     }
   });
-  
+
   popup.loadFile(website);
   popup.openDevTools();
   //popup.removeMenu();
@@ -34,14 +34,14 @@ function createWindow () {
   });
   win.maximize();
   win.show();
-  
+
   var menu = Menu.buildFromTemplate([
     {
       label: 'File',  //(process.platform === 'darwin') ? app.getName() : 'File'
       submenu: [
         {label:'&New Modpack'},
-        {label:'Export', submenu: [{label:'Twitch'}, {label:'MultiMC'}]},
-        {label:'Import'},
+        {label:'Export', submenu: [{label:'Twitch'}, {label:'MultiMC'}, {label:'Minecraft Launcher'}]},
+        {label:'Import', submenu: [{label:'Twitch'}, {label:'MultiMC'}, {label:'Minecraft Launcher'}]},
         {role:'quit'}
         ]
     },
@@ -57,7 +57,14 @@ function createWindow () {
       label: 'View',
       submenu: [
         {role:'reload'},
-        {label:'Toggle Theme'}
+        {label:'Toggle Theme'},
+        {
+          label: 'Dev Tools',
+          accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+          click (item, focusedWindow) {
+            if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+          }
+        }
       ]
     },
     {
@@ -66,16 +73,19 @@ function createWindow () {
         { label: 'About',
           click() { createPopup('about.html'); }
         },
+        { label: 'License',
+          click() {}
+        },
         { label: 'Report bug/feature',
-          click() { /* Open Github */ }
+          click() { shell.openExternal('https://github.com/funblaster22/Modpack-Creator/issues'); }
         },
         { label: '&Find',
-          click() {/* window.find(string) */}
+          click() { /* window.find(string) */ }
         }
       ]
     }
   ]);
-  //Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(menu);
 
   // and load the index.html of the app.
   win.loadFile('index.html');
