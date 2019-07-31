@@ -21,7 +21,7 @@ delete window.module;
   <body>
     <template id=cell>
       <div>
-        <img src="meow.png" onerror="this.src = 'missing.jpg';" title='Click to change' width=80 height=80 />
+        <img src="meow.png" onerror="this.src = 'missing.jpg';" title='Click to change' onclick="getName(event.target, 'icon-selector', choosePic)" width=80 height=80 />
         <span>hello</span>
         <div class=button-container><button class="rounded-button fas fa-cog" onclick="openSettings(event)"></button>
         <button class="rounded-button fas fa-plus"></button>

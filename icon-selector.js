@@ -2,12 +2,7 @@ const {dialog} = nodeRequire('electron').remote;
 const fs = nodeRequire('fs');
 
 function choosePic(event) {
-  if (detailDiv) {  //if already open
-    if (detailDiv.className == 'icon-selector') closeTab();
-    else $(detailDiv).remove();
-    return;
-  }
-  getName(event.target);  //TODO:  wait to show until animation done
+  //getName(event.target);  TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";
 
   fs.readdirSync('icons/').forEach(file => {

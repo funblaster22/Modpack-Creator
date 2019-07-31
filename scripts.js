@@ -22,7 +22,6 @@ function load() {
   cell.querySelector('span').innerText = modpackName;
   var img = cell.querySelector('img');
   img.src = modpackDetails.icon;
-  img.addEventListener("click", choosePic, false);
   flexbox.appendChild(cell);
   }
   $(`<div style="border:none;"><button class=rounded-button onclick=newModpack()>New</button></div>`).appendTo('.flex');
@@ -60,7 +59,13 @@ function newModpack() {
   .catch(console.error);
 }
 
-function getName(elem) {  // elem = obj that was clicked
+function getName(elem, name, callback) {  // elem = obj that was clicked
+  if (detailDiv) {  //if already open
+    if (detailDiv.className == name) closeTab();
+    else $(detailDiv).remove();
+    return;
+  }
+
   dad = elem.parentElement;  // dad = main elem containing all info for single modpack
   while (dad.className != '') {  // b/c buttons are nested inside another div
     console.log('up');
@@ -76,7 +81,7 @@ function getName(elem) {  // elem = obj that was clicked
 
   $('.flex').animate({
     top: -previous * $(dad).outerHeight() // replace with height of cell
-  }, 1000);
+  }, 1000, callback);
   $('html').css('overflow-y', 'hidden');
 }
 
