@@ -79,3 +79,15 @@ function getName(elem) {  // elem = obj that was clicked
   }, 1000);
   $('html').css('overflow-y', 'hidden');
 }
+
+function closeTab() {
+  $('#detail *').hide();
+  detailDiv.style.animationName = 'detail-retract';
+  $('.flex').animate({
+    top: 0 // replace with height of cell
+  }, 1000, function() {  // run when animation finishes
+    $('html').css('overflow-y', 'auto');
+    detailDiv.remove();
+    detailDiv = undefined;
+  });
+}

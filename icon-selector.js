@@ -2,7 +2,11 @@ const {dialog} = nodeRequire('electron').remote;
 const fs = nodeRequire('fs');
 
 function choosePic(event) {
-  if (document.getElementById('detail')) return;  //if already open, ignore
+  if (detailDiv) {  //if already open
+    if (detailDiv.className == 'icon-selector') closeTab();
+    else $(detailDiv).remove();
+    return;
+  }
   getName(event.target);  //TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";
 
@@ -24,7 +28,9 @@ function changeIcon(icon) {
   var projects = JSON.parse(data);
   projects[selectedMod].icon = icon.getAttribute("src");
   fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
-  location.reload();  // TODO:  smooth transition
+  dad.querySelector('img').src = icon.getAttribute("src");
+  closeTab();
+  //location.reload();   TODO:  smooth transition
 }
 
 function uploadImg() {
