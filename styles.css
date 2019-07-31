@@ -55,6 +55,7 @@ html, body {
   animation-name: detail-expand;
   animation-duration: 1s;
   animation-fill-mode: both;
+  overflow-y: auto;
 }
 
 /*** Styles for Icon Selector ***/
