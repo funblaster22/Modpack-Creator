@@ -1,55 +1,28 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="profile.jpg">
-    <title>Settings</title>
-    <script>
-window.addEventListener("message", receiveMessage, false);
-var modName;
-const {dialog} = require('electron').remote;
-window.opener.postMessage('', "file://");
+<div>Memory
+  <span class=help>?</span>
+  <input type="range" multiple value="10,80" />
+</div>
 
-function receiveMessage(event) { console.log(event);
-  if (event.origin !== "file://")
-    return;  // TODO: change if hosting online
+<div>MC version
+  <span class=help>?</span>
+  <select></select>
+  <button>Auto</button>
+</div>
 
-  modName = event.data;
-  load();
-}
+<div>Forge version
+  <span class=help>?</span>
+  <select>
+    <option>Reccomended</option>
+    <option>Latest</option>
+  </select>
+</div>
 
-const fs = require('fs');
+<div>
+  <button>Update Mods</button>
+</div>
 
-function load() {
-  
-}
-    </script>
-    <style>
-html, body {
-  padding: 0;
-  margin: 0;
-  overflow-x: hidden;
-}
+<div id=advanced>
+  <button class=danger>DELETE</button>
+</div>
 
-.flex {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-}
-
-.flex > img {
-  box-sizing: border-box;
-  width: 20%;
-  margin: 2%;
-  /*image-rendering: pixelated;*/
-}
-    </style>
-  </head>
-  <body>
-    <div class=flex></div>
-  </body>
-</html>
+<a href='#' onclick='$("#advanced").toggle();'>Advanced</a>

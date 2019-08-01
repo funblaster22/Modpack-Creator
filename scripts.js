@@ -16,20 +16,21 @@ function load() {
   const flexbox = document.querySelector('.flex');
 
   for (var modpackName in projects) {
-  var modpackDetails = projects[modpackName];
-  var cell = document.getElementById("cell").content;
-  cell = cell.cloneNode(true);
-  cell.querySelector('span').innerText = modpackName;
-  var img = cell.querySelector('img');
-  img.src = modpackDetails.icon;
-  flexbox.appendChild(cell);
+    var modpackDetails = projects[modpackName];
+    var cell = document.getElementById("cell").content;
+    cell = cell.cloneNode(true);
+    cell.querySelector('span').innerText = modpackName;
+    var img = cell.querySelector('img');
+    img.src = modpackDetails.icon;
+    flexbox.appendChild(cell);
   }
   $(`<div style="border:none;"><button class=rounded-button onclick=newModpack()>New</button></div>`).appendTo('.flex');
 }
 
 function openSettings(event) {
-  getName(event.target);
-  //var settingsModal = window.open("settings.html", "Settings");
+  let html = fs.readFileSync('settings.html');
+  detailDiv.innerHTML = html;
+  multirange(document.querySelector('input[multiple]'));
 }
 
 function newModpack() {
@@ -62,7 +63,7 @@ function newModpack() {
 function getName(elem, name, callback) {  // elem = obj that was clicked
   if (detailDiv) {  //if already open
     if (detailDiv.className == name) closeTab();
-    else $(detailDiv).remove();
+    else { $('#detail *').remove(); detailDiv.className = name; callback(); }
     return;
   }
 
@@ -75,6 +76,7 @@ function getName(elem, name, callback) {  // elem = obj that was clicked
   selectedMod = dad.innerText.trim();
   detailDiv = document.createElement('div');
   detailDiv.id = 'detail';
+  detailDiv.className = name;
   $(detailDiv).insertAfter(dad);
 
   let previous = $(dad).prevAll().length;  // number of previous siblings (for animation)
