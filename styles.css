@@ -92,3 +92,24 @@ img {
 #advanced {
   display: none;
 }
+
+
+/*** Styles for Add Mods ***/
+#detail.add-mods > input {
+  width: 90%;
+}
+
+ul, li {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+  width: 80%;
+  margin: auto;
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+}

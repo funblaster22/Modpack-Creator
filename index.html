@@ -14,7 +14,9 @@ delete window.module;
     <link href="fontawesome/css/all.css" rel="stylesheet">
     <script src="multirange.js" type="text/javascript"></script>
     <link rel = "stylesheet" type="text/css" href="multirange.css" />
+
     <script src="icon-selector.js" type="text/javascript"></script>
+    <script src="add-mods.js" type="text/javascript"></script>
     <script src="scripts.js" type="text/javascript"></script>
     <link rel = "stylesheet" type="text/css" href="styles.css" />
     <link rel="icon" type="image/png" href="profile.jpg">
@@ -24,13 +26,30 @@ delete window.module;
     <template id=cell>
       <div>
         <img src="meow.png" onerror="this.src = 'missing.jpg';" title='Click to change' onclick="getName(event.target, 'icon-selector', choosePic)" width=80 height=80 />
-        <span>hello</span>
+        <span>Name</span>
         <div class=button-container>
           <button class="rounded-button fas fa-cog" onclick="getName(event.target, 'settings', openSettings)"></button>
-          <button class="rounded-button fas fa-plus"></button>
+          <button class="rounded-button fas fa-plus" onclick="getName(event.target, 'add-mods', addMods)"></button>
           <button class="rounded-button fas fa-play"></button>
         </div>
       </div>
+    </template>
+    <template id=search-card>
+      <li class=search>
+        <div>
+          <img src='' />
+          <a class=title href='#'>Title</a>
+          by
+          <a href='#' class=author onclick='event.preventDefault(); console.log("https://www.curseforge.com" + $(this).attr("href"));' template='href'>funblaster22</a>
+          <!-- TODO: search for mods by author when clicked -->
+        </div><div>
+          <span class=description>description</span>
+          <button class="rounded-button fas fa-caret-down"></button>
+        </div><div>
+          <span class=tags>tags</span>
+          <button style="float: right;">Add</button>
+        </div>
+      </li>
     </template>
     <div class=flex></div>
   </body>

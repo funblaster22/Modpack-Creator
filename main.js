@@ -6,8 +6,8 @@ function createPopup (website) {
   let popup = new BrowserWindow({
     parent: win,
     modal: true,
-    //resizable: false,
-    //alwaysOnTop: true,
+    resizable: false,
+    alwaysOnTop: true,
     //width: 100,
     //height: 100,
     webPreferences: {
@@ -29,6 +29,7 @@ function createWindow () {
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
+      //webviewTag: true
       //nativeWindowOpen: true
     }
   });
