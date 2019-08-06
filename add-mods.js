@@ -4,12 +4,14 @@ var loading;
 //var webview;
 
 function addMods() {
-  detailDiv.innerHTML = '<input placeholder="Search Query or URL to downloads" /><span>?</span>'
+  detailDiv.innerHTML = `<input placeholder="Search Query or URL to downloads" />
+    <span class=help title="Enter mod name to search Curseforge, enter URL of other (non-Curse) download page"></span>`;
   var searchBox = detailDiv.querySelector('input');
   searchBox.addEventListener('change', search);
   loading = $('<div><img src="infinity-loading.svg" /></div>')
     .appendTo(detailDiv)
     .hide();
+  initTooltips();
   /*detailDiv.innerHTML += '<webview src="https://www.curseforge.com/minecraft/mc-mods/search" style="height:100%" />';
   webview = document.querySelector('webview');
   webview.addEventListener('dom-ready', edit);

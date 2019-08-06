@@ -23,6 +23,10 @@ img {
   user-drag: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 .flex {
   position: absolute;
   width: 100vw;
@@ -30,13 +34,15 @@ img {
 }
 
 .rounded-button {
-  cursor: pointer;
   border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  border: 2px solid darkgrey;
+  padding: 0;
 }
 
 .button-container {
   text-align: right;
-  flex-grow: 99;
   min-width: 100px;
 }
 
@@ -68,6 +74,11 @@ img {
   display: block;
 }
 
+#powerTip {
+	width: 300px;
+  white-space: normal;
+}
+
 
 /*** Styles for Icon Selector ***/
 #detail.icon-selector {
@@ -86,7 +97,23 @@ img {
 
 /*** Styles for Settings ***/
 .danger {
+  background-color: red;
+  color: pink;
+  border: 2px solid darkred;
+  font-variant: small-caps;
+  font-weight: bold;
+}
 
+.help {
+  font-size: 12pt;
+  cursor: help;
+}
+
+input[disabled] {
+  border: none;
+  background-color: transparent;
+  color: black;
+  pointer-events: none;
 }
 
 #advanced {

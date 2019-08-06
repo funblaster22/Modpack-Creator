@@ -19,18 +19,12 @@ function load() {
     var modpackDetails = projects[modpackName];
     var cell = document.getElementById("cell").content;
     cell = cell.cloneNode(true);
-    cell.querySelector('span').innerText = modpackName;
+    cell.querySelector('input').value = modpackName;
     var img = cell.querySelector('img');
     img.src = modpackDetails.icon;
     flexbox.appendChild(cell);
   }
   $(`<div style="border:none;"><button class=rounded-button onclick=newModpack()>New</button></div>`).appendTo('.flex');
-}
-
-function openSettings(event) {
-  let html = fs.readFileSync('settings.html');
-  detailDiv.innerHTML = html;
-  multirange(document.querySelector('input[multiple]'));
 }
 
 function newModpack() {
@@ -45,14 +39,25 @@ function newModpack() {
         type: 'text', required: true
     }
   })
-  .then((r) => {
-    if($.trim(r).length === 0) {
+  .then((result) => {
+    if($.trim(result).length === 0) {
       console.log('user cancelled');
     } else {
-      console.log('result: ', r);
+      console.log('result: ', result);
       var data = fs.readFileSync('projects.json');
       var projects = JSON.parse(data);
-      projects[r] = {icon:''};
+      projects[result] = {
+        "icon": "",
+        "allVersions": [],
+        "mods": [],
+        "settings": {
+          "memoryMin": 1000,
+          "memoryMax": 6000,
+          "MCversion": "Auto",
+          "forgeVersion": "Recommended",
+          "releaseType": "Release"
+        }
+      };
       fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
       location.reload();
     }
@@ -60,10 +65,24 @@ function newModpack() {
   .catch(console.error);
 }
 
-function getName(elem, name, callback) {  // elem = obj that was clicked
+function initTooltips() {
+  $('.help').addClass('fas fa-question-circle');
+  $('.help').powerTip({  //TODO: call whenever opening new tab
+  	placement: 'ne',
+    smartPlacement: true
+  });
+}
+
+function getName(elem, name, callback) {  // elem = obj that was clicked  // TODO: rename to openTab
+  $('input').attr("disabled", '');
+  window.getSelection().removeAllRanges();
   if (detailDiv) {  //if already open
     if (detailDiv.className == name) closeTab();
-    else { $('#detail *').remove(); detailDiv.className = name; callback(); }
+    else {
+      $('#detail *').remove();
+      detailDiv.className = name;
+      callback();
+    }
     return;
   }
 
@@ -73,7 +92,7 @@ function getName(elem, name, callback) {  // elem = obj that was clicked
     elem = dad
     dad = elem.parentElement;
   }
-  selectedMod = dad.innerText.trim();
+  selectedMod = dad.querySelector('input').value;
   detailDiv = document.createElement('div');
   detailDiv.id = 'detail';
   detailDiv.className = name;

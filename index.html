@@ -19,6 +19,7 @@ delete window.module;
 
     <script src="icon-selector.js" type="text/javascript"></script>
     <script src="add-mods.js" type="text/javascript"></script>
+    <script src="settings.js" type="text/javascript"></script>
     <script src="scripts.js" type="text/javascript"></script>
     <link rel = "stylesheet" type="text/css" href="styles.css" />
     <link rel="icon" type="image/png" href="profile.jpg">
@@ -28,7 +29,7 @@ delete window.module;
     <template id=cell>
       <div>
         <img src="meow.png" onerror="this.src = 'missing.jpg';" title='Click to change' onclick="getName(event.target, 'icon-selector', choosePic)" width=80 height=80 />
-        <span>Name</span>
+        <input value='Name' disabled style='font-size: inherit; flex-grow: 99;' onchange='changeName(this)' />
         <div class=button-container>
           <button class="rounded-button fas fa-cog" onclick="getName(event.target, 'settings', openSettings)"></button>
           <button class="rounded-button fas fa-plus" onclick="getName(event.target, 'add-mods', addMods)"></button>
@@ -52,6 +53,47 @@ delete window.module;
           <button style="float: right;">Add</button>
         </div>
       </li>
+    </template>
+    <template id=settings>
+      <div>Memory
+        <span class=help title='The minimum + maximum amount of RAM Minecraft gets. More mods requires more memory (reccomended 1-6 Gigabytes)'></span>
+        <input type="range" multiple value="10,80" style='display: block;
+        width: calc(100% - 20px);' />
+      </div>
+
+      <div>MC version
+        <span class=help title='Which version of Minecraft to use. Auto will select the latest version that supports the most mods'></span>
+        <select id=MCversion class=allVersions>
+          <option>Auto</option>
+        </select>
+      </div>
+
+      <div>Forge version
+        <span class=help title='Forge loads your mods into the game. Use recomended unless mod requires a specific version'></span>
+        <select id=forgeVersion>
+          <option>Recommended</option>
+          <option>Latest</option>
+        </select>
+      </div>
+
+      <div>Release type
+        <span class=help title='What release type to download for each mod. Will always download the latest version that matches or above (eg. if "beta" is set, will allow "release" and "beta")'></span>
+        <select id=releaseType>
+          <option>Release</option>
+          <option>Beta</option>
+          <option>Alpha</option>
+        </select>
+      </div>
+
+      <div>
+        <button>Update Mods</button>
+      </div>
+
+      <div id=advanced>
+        <button class=danger onclick='confirmDelete()'>DELETE</button>
+      </div>
+
+      <a href='#' onclick='$("#advanced").toggle();'>Advanced</a>
     </template>
     <div class=flex></div>
   </body>

@@ -1,17 +1,60 @@
 {
   "Modcraft": {
-    "icon": "icons/dab.jpg"
-  },
-  "Emmy": {
-    "icon": ""
+    "icon": "icons/dab.jpg",
+    "allVersions": [
+      "1.7",
+      "1.8",
+      "1.9",
+      "1.10",
+      "1.11",
+      "1.12"
+    ],
+    "mods": [
+      {
+        "name": "thaumcraft",
+        "dependencies": [
+          "baubles"
+        ],
+        "supportedMCversions": [
+          "1.7",
+          "1.8",
+          "1.9",
+          "1.10",
+          "1.11",
+          "1.12"
+        ]
+      }
+    ],
+    "settings": {
+      "memoryMin": 1000,
+      "memoryMax": 1000,
+      "MCversion": "Auto",
+      "forgeVersion": "Recommended",
+      "releaseType": "Beta"
+    }
   },
   "Natcat": {
-    "icon": "icons/villager-house.jpg"
+    "icon": "",
+    "allVersions": [],
+    "mods": [],
+    "settings": {
+      "memoryMin": 1000,
+      "memoryMax": 6000,
+      "MCversion": "Auto",
+      "forgeVersion": "Recommended",
+      "releaseType": "Release"
+    }
   },
   "\";alert('Youve been hacked!');//": {
-    "icon": "icons/grass.png"
-  },
-  "</span><script>alert('Youve been hacked!');</script><span>": {
-    "icon": "icons/misaligned.jpg"
+    "icon": "icons/long-chest.jpg",
+    "allVersions": [],
+    "mods": [],
+    "settings": {
+      "memoryMin": 1000,
+      "memoryMax": 6000,
+      "MCversion": "Auto",
+      "forgeVersion": "Recommended",
+      "releaseType": "Release"
+    }
   }
 }
