@@ -7,7 +7,8 @@ function createPopup (website) {
     parent: win,
     modal: true,
     resizable: false,
-    alwaysOnTop: true,
+    minimizable: false,
+    maximizable: false,
     //width: 100,
     //height: 100,
     webPreferences: {
@@ -19,6 +20,7 @@ function createPopup (website) {
   popup.openDevTools();
   //popup.removeMenu();
   //popup.setMenuBarVisibility(false);
+  return popup;
 }
 
 var win;
@@ -49,8 +51,11 @@ function createWindow () {
     {
       label: 'Edit',
       submenu: [
-        { label:'MC Location',
+        { label: 'MC Location',
           click() { createPopup('locate.html'); }
+        },
+        { label: 'Update All',
+          click() {}
         }
       ]
     },
@@ -91,6 +96,14 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('index.html');
   win.openDevTools();
+
+  win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    // open window as modal
+    //if (frameName === 'modal')
+    event.preventDefault();
+    url = url.split('/');
+    event.newGuest = createPopup(url[url.length-1]);
+  });
 }
 
 app.on('ready', createWindow)

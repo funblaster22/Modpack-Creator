@@ -9,15 +9,8 @@
 const { dialog } = require('electron').remote;
 const os = require('os');
 const find = require('find');
-const { shell } = require('electron')
+const { shell } = require('electron');
 
-if (localStorage.user == null) {  // To ensure that someone doesn't distribute their exe and break program with invalid MCpath
-  localStorage.user = os.homedir();
-}
-if (localStorage.user != os.homedir()) {
-  localStorage.user = os.homedir();
-  localStorage.removeItem("MCpath");
-}
 
 window.onload = function() {
   if (localStorage.MCpath == null) {
@@ -39,7 +32,7 @@ function autodetect() {
   if (MCpath === undefined) {  // Minecraft was not found
     search(document.querySelector('button[onclick="search(event.target)"]'));  // TODO: make cleaner
   } else {  // Minecraft was found
-    if (warnUser(MCpath))
+    //if (warnUser(MCpath))
       localStorage.MCpath = MCpath;
   }
   location.reload();
@@ -47,7 +40,7 @@ function autodetect() {
 
 function search(target) { console.log('searching...'); // search for .minecraft or minecraft folders
   document.getElementById('advanced').style.display = 'initial';  // show locate button
-  target.style.display = 'none';  // TODO: show loading img
+  target.style.display = 'none';
 
   find
   .eachdir(/minecraft$/i, os.homedir(), function(dir) {
@@ -76,7 +69,7 @@ function locate() {
 }
 
 function validateFolder(folder) {  // TODO
-  return true;
+  return false;
 }
 
 function warnUser(folder) {
@@ -115,12 +108,33 @@ p {
 img {
   height: 2em;
 }
+
+li {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+[onclick] {
+  cursor: pointer;
+}
+
+li:active {
+  color: red;
+}
     </style>
   </head>
   <body>
     <p id=loading><img src="infinity-loading.svg" />  Locating your Minecraft folder...</p>
-    <p id=done>Minecraft has been detected at <code>${ localStorage.MCpath }</code> <button onclick="autodetect()">Auto-detect</button> <button onclick="search(event.target)">Incorrect?</button></p>
-      <ul></ul>
-      <button onclick="locate()" style="display: none;" id=advanced>Locate</button>
+    <p id=done>Minecraft has been detected at
+      <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.MCpath }</code>
+      <button onclick="autodetect()">Auto-detect</button>
+      <button onclick="search(event.target)">Incorrect?</button>
+    </p>
+    <ul></ul>
+    <div id=advanced style="display: none;">
+      <img src="infinity-loading.svg" /> Searching...
+      <button onclick="locate()">Locate</button>
+    </div>
   </body>
 </html>

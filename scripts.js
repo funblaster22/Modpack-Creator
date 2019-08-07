@@ -1,11 +1,23 @@
 //const fs = nodeRequire('fs');
 const electron = nodeRequire('electron');
+const os = nodeRequire('os');
 
 var debug;
 var selectedMod;
 var dad;
 var projects;
 var detailDiv;
+
+// check if Minecraft location is defined
+if (localStorage.user == null) {  // To ensure that someone doesn't distribute their exe and break program with invalid MCpath
+  localStorage.user = os.homedir();
+  window.open('locate.html');
+}
+if (localStorage.user != os.homedir()) {
+  localStorage.user = os.homedir();
+  localStorage.removeItem("MCpath");
+  window.open('locate.html');
+}
 
 fs.readFile('projects.json', function(err, data) {
   projects = JSON.parse(data);
