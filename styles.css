@@ -126,14 +126,18 @@ input[disabled] {
   width: 90%;
 }
 
-ul, li {
+#detail.add-mods > ul, #detail.add-mods > li {
     display: block;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-li {
+#detail.add-mods .detail {
+  border: 1px dotted grey; margin-top: 10px; margin-bottom: 10px;
+}
+
+#detail.add-mods > li {
   width: 80%;
   margin: auto;
   border: 1px solid black;

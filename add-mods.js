@@ -1,42 +1,36 @@
 const request = nodeRequire('request');
 const { shell } = nodeRequire('electron');
-var loading;
-//var webview;
 
 function addMods() {
   detailDiv.innerHTML = `<input placeholder="Search Query or URL to downloads" />
     <span class=help title="Enter mod name to search Curseforge, enter URL of other (non-Curse) download page"></span>`;
   var searchBox = detailDiv.querySelector('input');
-  searchBox.addEventListener('change', search);
-  loading = $('<div><img src="infinity-loading.svg" /></div>')
-    .appendTo(detailDiv)
-    .hide();
+  searchBox.addEventListener('change', parseSearch);
   initTooltips();
-  /*detailDiv.innerHTML += '<webview src="https://www.curseforge.com/minecraft/mc-mods/search" style="height:100%" />';
-  webview = document.querySelector('webview');
-  webview.addEventListener('dom-ready', edit);
-
-  webview.addEventListener('console-message', (e) => {
-    console.log('Guest page logged a message:', e.message)
-  });*/// README:  leftover from embeded webview
 }
 
-function search(event) {
+function newSearch(url, loadingLocation=undefined) {
+  if (loadingLocation)
+    var loading = $('<img src="infinity-loading.svg" />').appendTo(loadingLocation);
+  // wrap a request in an promise
+  return new Promise((resolve, reject) => {
+    request('https://www.curseforge.com/minecraft/mc-mods/' + url, (error, response, body) => {
+      if (error) { reject(error); alert('You are not connected to the internet!'); }
+      if (response.statusCode != 200)
+        reject('Invalid status code <' + response.statusCode + '>');
+      var doc = new DOMParser().parseFromString(body, 'text/html');
+      resolve(doc);
+      if (loadingLocation)
+        loading.remove();
+    });
+  });
+}
+
+async function parseSearch(event) {
   let query = event.target.value;
-  loading.show();
   $('.search').remove();
-  request({
-    uri: "https://www.curseforge.com/minecraft/mc-mods/search?search=" + query,
-  }, parseSearch);
-}
+  var doc = await newSearch("search?search=" + query, detailDiv);
 
-function parseSearch(error, response, body) { loading.hide();
-  if (error) {
-    alert('You are not connected to the internet!');
-    closeTab();
-  }
-
-  var doc = new DOMParser().parseFromString(body, 'text/html');
   var items = doc.querySelectorAll('.project-listing-row');
   items.forEach(function (item, index) { console.log(item);
     let title = item.querySelector('h3').innerText.trim();
@@ -51,10 +45,35 @@ function parseSearch(error, response, body) { loading.hide();
       '.title': title,
       '.author': author,
       '.description': description,
-      '.tags': 'tags' });
+      '.tags': 'tags',
+      'img': {src: icon },
+      '.search': {link: link}
+    });
     detailDiv.appendChild(container);
   });
   $('<h4 class=search>No More Results</h1>').appendTo(detailDiv);
+}
+
+async function showDetails(target) {
+  var searchCard = target.parentElement.parentElement;
+  var dropdown = searchCard.querySelector('.fas');
+  if (dropdown.classList.contains('fa-caret-down')) {  // toggle show detail
+    dropdown.className = dropdown.className.replace('fa-caret-down', 'fa-caret-up');
+    var query = searchCard.link.split('/');
+    query = query[query.length-1];
+    var doc = await newSearch(query, searchCard.querySelector('.detail'));
+
+    searchCard.querySelector('.detail').innerHTML = doc.querySelector('.project-detail__content').innerHTML;
+    $('.detail a').on('click', function(event) {
+      event.preventDefault();
+      shell.openExternal(event.target.href);
+    });
+    $('.detail img').css('maxWidth', '100%');
+  }
+  else { // toggle hide detail
+    dropdown.className = dropdown.className.replace('fa-caret-up', 'fa-caret-down');
+    $('.detail').empty();
+  }
 }
 
 function fillTemplate(template, dictionary) {

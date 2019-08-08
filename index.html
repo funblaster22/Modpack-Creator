@@ -41,13 +41,14 @@ delete window.module;
       <li class=search>
         <div>
           <img src='' />
-          <a class=title href='#'>Title</a>
+          <a class=title href='#' onclick='showDetails(this)'>Title</a>
           by
           <a href='#' class=author onclick='event.preventDefault(); console.log("https://www.curseforge.com" + $(this).attr("href"));' template='href'>funblaster22</a>
           <!-- TODO: search for mods by author when clicked -->
         </div><div>
           <span class=description>description</span>
-          <button class="rounded-button fas fa-caret-down"></button>
+          <button class="rounded-button fas fa-caret-down" onclick="showDetails(this)"></button>
+          <div class=detail></div>
         </div><div>
           <span class=tags>tags</span>
           <button style="float: right;">Add</button>
