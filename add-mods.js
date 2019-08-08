@@ -12,23 +12,31 @@ function addMods() {
 function newSearch(url, loadingLocation=undefined) {
   if (loadingLocation)
     var loading = $('<img src="infinity-loading.svg" />').appendTo(loadingLocation);
+  if (!/^https?:\/\//.test(url))
+    url = 'https://www.curseforge.com/minecraft/mc-mods/' + url;
   // wrap a request in an promise
   return new Promise((resolve, reject) => {
-    request('https://www.curseforge.com/minecraft/mc-mods/' + url, (error, response, body) => {
+    request(url, (error, response, body) => {
+      if (loadingLocation)
+        loading.remove();
       if (error) { reject(error); alert('You are not connected to the internet!'); }
       if (response.statusCode != 200)
         reject('Invalid status code <' + response.statusCode + '>');
-      var doc = new DOMParser().parseFromString(body, 'text/html');
+
+      var fileType = response.headers["content-type"]
+      console.log(fileType);
+      var doc;
+      if (fileType.includes('application/json'))
+        doc = JSON.parse(body);
+      else if (fileType.includes('text/html'))
+        doc = new DOMParser().parseFromString(body, 'text/html');
       resolve(doc);
-      if (loadingLocation)
-        loading.remove();
     });
   });
 }
 
 async function parseSearch(event) {
   let query = event.target.value;
-  $('.search').remove();
   var doc = await newSearch("search?search=" + query, detailDiv);
 
   var items = doc.querySelectorAll('.project-listing-row');
@@ -59,9 +67,7 @@ async function showDetails(target) {
   var dropdown = searchCard.querySelector('.fas');
   if (dropdown.classList.contains('fa-caret-down')) {  // toggle show detail
     dropdown.className = dropdown.className.replace('fa-caret-down', 'fa-caret-up');
-    var query = searchCard.link.split('/');
-    query = query[query.length-1];
-    var doc = await newSearch(query, searchCard.querySelector('.detail'));
+    var doc = await newSearch(searchCard.link, searchCard.querySelector('.detail'));
 
     searchCard.querySelector('.detail').innerHTML = doc.querySelector('.project-detail__content').innerHTML;
     $('.detail a').on('click', function(event) {
@@ -72,7 +78,7 @@ async function showDetails(target) {
   }
   else { // toggle hide detail
     dropdown.className = dropdown.className.replace('fa-caret-up', 'fa-caret-down');
-    $('.detail').empty();
+    $(searchCard.querySelector('.detail')).empty();
   }
 }
 
@@ -96,15 +102,3 @@ function fillTemplate(template, dictionary) {
     }
   }
 }
-
-/*function edit() {  // remove header + footer
-  webview.executeJavaScript("document.querySelector('.flex-none').remove();");
-  webview.executeJavaScript("document.querySelector('footer').remove();");
-  webview.executeJavaScript(`$('a:contains("Install")').remove();`);
-  webview.executeJavaScript(`$('a').click(function(e) { e.preventDefault(); });`);
-  webview.executeJavaScript(`$('a:contains("Download")').click(function(event) {
-    $(this).text('Added!')
-    console.log('DOWNLOADING ' + this.href.split('/')[5]);
-  })
-  .text('Add');`);
-}*/// README:  leftover from embeded webview
