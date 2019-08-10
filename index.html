@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>  // b/c jquery overrides these functions
 window.nodeRequire = require;
+const electron = nodeRequire('electron');
+const os = nodeRequire('os');
+const request = nodeRequire('request');
+const { shell } = nodeRequire('electron');
+const prompt = nodeRequire('electron-prompt');
+const {dialog} = nodeRequire('electron').remote;
+const fs = nodeRequire('fs');
 delete window.require;
 delete window.exports;
 delete window.module;

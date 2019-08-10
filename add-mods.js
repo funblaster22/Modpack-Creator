@@ -1,7 +1,3 @@
-const request = nodeRequire('request');
-const { shell } = nodeRequire('electron');
-
-
 function editProjectsFile(edit) {  // TODO: rename to projectsFile
   let data = JSON.parse(fs.readFileSync('projects.json'));
   let modInfo = data[selectedMod];

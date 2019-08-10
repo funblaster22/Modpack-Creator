@@ -1,6 +1,3 @@
-const {dialog} = nodeRequire('electron').remote;
-const fs = nodeRequire('fs');
-
 function choosePic(event) {
   //getName(event.target);  TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";

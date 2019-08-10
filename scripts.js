@@ -1,7 +1,3 @@
-//const fs = nodeRequire('fs');
-const electron = nodeRequire('electron');
-const os = nodeRequire('os');
-
 var debug;
 var selectedMod;
 var dad;
@@ -40,8 +36,6 @@ function load() {
 }
 
 function newModpack() {
-  const prompt = nodeRequire('electron-prompt');
-
   prompt({
     title: 'New Modpack',
     label: 'Name:',
