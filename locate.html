@@ -64,8 +64,8 @@ function locate() {
     if (folder !== undefined && warnUser(folder[0])) {
       localStorage.MCpath = folder;
     }
+    location.reload();
   });
-  location.reload();
 }
 
 function validateFolder(folder) {  // TODO
