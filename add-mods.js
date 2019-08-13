@@ -35,7 +35,7 @@ function newSearch(url, loadingLocation=undefined) {
 
       var fileType = response.headers["content-type"]
       console.log(fileType);
-      var doc;
+      var doc = body;
       if (fileType.includes('application/json'))
         doc = JSON.parse(body);
       else if (fileType.includes('text/html'))
