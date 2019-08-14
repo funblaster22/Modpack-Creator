@@ -4,7 +4,7 @@ function play(target) {
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion(file) : file.settings.MCversion;
   console.log(bestVersion);
 
-  let path = localStorage.MCpath + '\\profiles\\' + selectedMod + '\\mods';
+  let path = process.cwd() + '\\profiles\\' + selectedMod + '\\mods';
   console.log(path);
   fs.mkdirSync(path, { recursive: true });
   for (var mod of file.mods) {

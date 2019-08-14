@@ -13,32 +13,32 @@ const { shell } = require('electron');
 
 
 window.onload = function() {
-  if (localStorage.MCpath == null) {
+  if (localStorage.profiles == null) {
     autodetect();
   } else {
     toggleStatus(true);
   }
 }
 
-var platforms = {  // Windows and mac MC locations
-  'win32': process.env["APPDATA"] + '\\.minecraft',
-  'darwin': os.homedir() + '\\Library\\Application Support\\minecraft'
-};
-
-
 function autodetect() {
   toggleStatus(false);
-  let MCpath = platforms[process.platform] || os.homedir() + '\\.minecraft';  // Select correct path for current platform || linux
-  if (MCpath === undefined) {  // Minecraft was not found
-    search(document.querySelector('button[onclick="search(event.target)"]'));  // TODO: make cleaner
-  } else {  // Minecraft was found
-    //if (warnUser(MCpath))
-      localStorage.MCpath = MCpath;
+  switch (process.platform) { // TODO: find launcher for macOS and linux
+    case 'win32':
+      localStorage.profiles = process.env["APPDATA"] + '\\.minecraft';
+      localStorage.launcher = process.env["ProgramFiles(x86)"] + '\\Minecraft\\MinecraftLauncher.exe';
+      break;
+    case 'darwin':
+      localStorage.profiles = os.homedir() + '\\Library\\Application Support\\minecraft';
+      break;
+    default:  // linux
+      localStorage.profiles = os.homedir() + '\\.minecraft';
   }
+  localStorage.profiles += '\\launcher_profiles.json';
   location.reload();
 }
 
-function search(target) { console.log('searching...'); // search for .minecraft or minecraft folders
+/*function search(target) { console.log('searching...');
+// search for .minecraft or minecraft folders
   document.getElementById('advanced').style.display = 'initial';  // show locate button
   target.style.display = 'none';
 
@@ -57,12 +57,12 @@ function search(target) { console.log('searching...'); // search for .minecraft 
   .end(function() {
     console.log('find end');
   })
-}
+}*/
 
 function locate() {
   dialog.showOpenDialog({properties: ['openDirectory']}, function (folder) { console.log(folder);
     if (folder !== undefined && warnUser(folder[0])) {
-      localStorage.MCpath = folder;
+      localStorage.profiles = folder;
     }
     location.reload();
   });
@@ -90,7 +90,7 @@ function warnUser(folder) {
 function toggleStatus(isDone) {
   document.getElementById('loading').style.display = (isDone) ? 'none' : 'initial';
   document.getElementById('done').style.display = (isDone) ? 'initial' : 'none';
-  document.querySelector('#done > code').innerText = localStorage.MCpath;
+  document.querySelector('#done > code').innerText = localStorage.profiles;
 }
     </script>
     <style>
@@ -127,9 +127,9 @@ li:active {
   <body>
     <p id=loading><img src="infinity-loading.svg" />  Locating your Minecraft folder...</p>
     <p id=done>Minecraft has been detected at
-      <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.MCpath }</code>
+      <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.profiles }</code>
       <button onclick="autodetect()">Auto-detect</button>
-      <button onclick="search(event.target)">Incorrect?</button>
+      <button onclick="locate(event.target)">Incorrect?</button>
     </p>
     <ul></ul>
     <div id=advanced style="display: none;">
