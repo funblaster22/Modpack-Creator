@@ -4,7 +4,7 @@ function play(target) {
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion(file) : file.settings.MCversion;
   console.log(bestVersion);
 
-  let path = process.cwd() + '\\profiles\\' + selectedMod + '\\mods';
+  let path = app.getPath('userData') + '\\profiles\\' + selectedMod + '\\mods';
   console.log(path);
   fs.mkdirSync(path, { recursive: true });
   for (var mod of file.mods) {
@@ -13,7 +13,28 @@ function play(target) {
     download(mod.name, filePath);
   }
 
-  //TODO: start MC launcher
+  //start MC launcher
+  let profiles = JSON.parse(fs.readFileSync(localStorage.profiles)); // TODO: put in function
+  let newProfile = {
+    authenticationDatabase: profiles.authenticationDatabase,
+    clientToken: profiles.clientToken,
+    profiles : {
+      selectedMod : {
+        "gameDir" : app.getPath('userData') + "\\profiles\\" + selectedMod,
+        "icon" : "Furnace",
+        "lastVersionId" : "1.7.10-Forge10.13.4.1558-1.7.10",
+        "name" : selectedMod,
+        "type" : "custom"
+      }
+    }
+  };
+  console.log(newProfile);
+  newProfile = JSON.stringify(newProfile, null, 2);
+  fs.writeFile(app.getPath('userData') + '\\launcher_profiles.json', newProfile, (err) => {
+    if (err)
+      throw err;
+  });
+  child_process.execFile(localStorage.launcher, ['--workDir', app.getPath('userData')]);
 
 
   function findBestVersion(file) {

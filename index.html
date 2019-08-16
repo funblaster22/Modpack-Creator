@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>  // b/c jquery overrides these functions
-window.nodeRequire = require;
-const electron = nodeRequire('electron');
-const os = nodeRequire('os');
-const request = nodeRequire('request');
-const { shell } = nodeRequire('electron');
-const prompt = nodeRequire('electron-prompt');
-const {dialog} = nodeRequire('electron').remote;
-const fs = nodeRequire('fs');
+const electron = require('electron');
+const os = require('os');
+const request = require('request');
+const { shell } = require('electron');
+const prompt = require('electron-prompt');
+const {dialog} = require('electron').remote;
+const fs = require('fs');
+const child_process = require('child_process');
+const app = electron.remote.app;
 delete window.require;
 delete window.exports;
 delete window.module;
