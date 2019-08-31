@@ -17,7 +17,8 @@ function createPopup (website) {
   });
 
   popup.loadFile(website);
-  popup.openDevTools();
+  if (process.defaultApp)
+    popup.openDevTools();
   //popup.removeMenu();
   //popup.setMenuBarVisibility(false);
   return popup;
@@ -28,6 +29,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     show: false,
+    icon: __dirname + '/profile.jpg',
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
@@ -36,7 +38,6 @@ function createWindow () {
     }
   });
   win.maximize();
-  win.show();
 
   var menu = Menu.buildFromTemplate([
     {
@@ -95,7 +96,12 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadFile('index.html');
-  win.openDevTools();
+  if (process.defaultApp)
+    win.openDevTools();
+
+    win.once('ready-to-show', () => {
+      win.show();
+    });
 
   win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
     // open window as modal
