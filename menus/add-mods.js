@@ -19,7 +19,7 @@ function addMods() {
 
 function newSearch(url, loadingLocation=undefined) {
   if (loadingLocation)
-    var loading = $('<img src="infinity-loading.svg" />').appendTo(loadingLocation);
+    var loading = $('<img src="assets/infinity-loading.svg" />').appendTo(loadingLocation);
   if (!/^https?:\/\//.test(url))
     url = 'https://www.curseforge.com/minecraft/mc-mods/' + url;
   console.log('FETCHING ', url);

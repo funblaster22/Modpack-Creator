@@ -7,12 +7,12 @@ var detailDiv;
 // check if Minecraft location is defined
 if (localStorage.user == null) {  // To ensure that someone doesn't distribute their exe and break program with invalid MCpath
   localStorage.user = os.homedir();
-  window.open('locate.html');
+  window.open('menus/locate.html');
 }
 if (localStorage.user != os.homedir()) {
   localStorage.user = os.homedir();
   localStorage.removeItem("MCpath");
-  window.open('locate.html');
+  window.open('menus/locate.html');
 }
 
 fs.readFile('projects.json', function(err, data) {

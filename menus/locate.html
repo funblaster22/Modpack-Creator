@@ -125,7 +125,7 @@ li:active {
     </style>
   </head>
   <body>
-    <p id=loading><img src="infinity-loading.svg" />  Locating your Minecraft folder...</p>
+    <p id=loading><img src="assets/infinity-loading.svg" />  Locating your Minecraft folder...</p>
     <p id=done>Minecraft has been detected at
       <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.profiles }</code>
       <button onclick="autodetect()">Auto-detect</button>
@@ -133,7 +133,7 @@ li:active {
     </p>
     <ul></ul>
     <div id=advanced style="display: none;">
-      <img src="infinity-loading.svg" /> Searching...
+      <img src="assets/infinity-loading.svg" /> Searching...
       <button onclick="locate()">Locate</button>
     </div>
   </body>

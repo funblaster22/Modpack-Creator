@@ -29,7 +29,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     show: false,
-    icon: __dirname + '/profile.jpg',
+    icon: __dirname + 'assets/profile.jpg',
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
@@ -53,7 +53,7 @@ function createWindow () {
       label: 'Edit',
       submenu: [
         { label: 'MC Location',
-          click() { createPopup('locate.html'); }
+          click() { createPopup('menus/locate.html'); }
         },
         { label: 'Update All',
           click() {}
@@ -78,7 +78,7 @@ function createWindow () {
       label: 'Help', // report bug, how to...
       submenu: [
         { label: 'About',
-          click() { createPopup('about.html'); }
+          click() { createPopup('menus/about.html'); }
         },
         { label: 'License',
           click() {}

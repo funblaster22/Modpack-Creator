@@ -1,8 +1,14 @@
 {
   "Modcraft": {
-    "icon": "icons/dab.jpg",
+    "icon": "assets/icons/dab.jpg",
     "allVersions": [
+      "1.6.4",
+      "1.8.9",
+      "1.9.4",
+      "1.10.2",
+      "1.11.2",
       "1.12.2",
+      "1.7.10",
       "1.9",
       "1.10",
       "1.11",
@@ -38,6 +44,26 @@
           "1.10",
           "1.11"
         ]
+      },
+      {
+        "name": "not-enough-cats",
+        "dependencies": [],
+        "supportedMCversions": [
+          "1.6.4",
+          "1.8.9",
+          "1.9.4",
+          "1.10.2",
+          "1.11.2",
+          "1.12.2",
+          "1.7.10",
+          "1.9",
+          "1.10",
+          "1.11",
+          "1.8",
+          "1.12",
+          "1.6",
+          "1.7"
+        ]
       }
     ],
     "settings": {
@@ -61,6 +87,6 @@
     }
   },
   "\";alert('Youve been hacked!');//": {
-    "icon": "icons/long-chest.jpg"
+    "icon": "assets/icons/villager-house.jpg"
   }
 }

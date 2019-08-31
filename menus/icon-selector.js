@@ -2,15 +2,15 @@ function choosePic(event) {
   //getName(event.target);  TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";
 
-  fs.readdirSync(__dirname + '\\icons\\').forEach(file => {
+  fs.readdirSync(__dirname + '\\assets\\icons\\').forEach(file => {
     console.log(file);
     var img = document.createElement('img');
-    img.src = 'icons/' + file;
+    img.src = 'assets/icons/' + file;
     img.onclick = function(event) { changeIcon(event.target) };
     detailDiv.appendChild(img);
   });
   var img = document.createElement('img');
-  img.src = 'upload-custom.gif';
+  img.src = 'assets/upload-custom.gif';
   img.addEventListener('click', uploadImg);
   detailDiv.appendChild(img);
 }
