@@ -1,0 +1,16 @@
+* {
+  color: white !important;
+}
+
+body, html {
+  background-color: #24292e;
+}
+
+button, input, select {
+  background-color: #222222;
+  border-color: #565656 !important;
+}
+
+img {
+  box-shadow: black 5px 5px 10px !important;
+}
