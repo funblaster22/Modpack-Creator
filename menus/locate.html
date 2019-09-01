@@ -59,10 +59,11 @@ function autodetect() {
   })
 }*/
 
-function locate() {
-  dialog.showOpenDialog({properties: ['openDirectory']}, function (folder) { console.log(folder);
-    if (folder !== undefined && warnUser(folder[0])) {
-      localStorage.profiles = folder;
+function locate(target, filter) {  // action = weather to open folder or file
+  dialog.showOpenDialog({properties: ['openFile'],
+  filters: [filter, { name: 'All Files', extensions: ['*']} ]}, function (folder) { console.log(folder);
+    if (folder !== undefined && warnUser(folder[0])) {  // TODO: limit file types
+      localStorage[target.parentElement.id] = folder;
     }
     location.reload();
   });
@@ -78,7 +79,7 @@ function warnUser(folder) {
       type: 'question',
       message: "Are you sure this is a valid MC directory:\n" + folder,
       title: "Confirm",
-      buttons: ['no', 'yes', 'Open in files']  // returns 1=yes, 0=no, 2=open
+      buttons: ['no', 'yes', 'Open in file explorer']  // returns 1=yes, 0=no, 2=open
     });
     if (result != 2) return result;
     shell.showItemInFolder(folder);
@@ -88,9 +89,11 @@ function warnUser(folder) {
 }
 
 function toggleStatus(isDone) {
-  document.getElementById('loading').style.display = (isDone) ? 'none' : 'initial';
-  document.getElementById('done').style.display = (isDone) ? 'initial' : 'none';
-  document.querySelector('#done > code').innerText = localStorage.profiles;
+  document.getElementById('loading').style.display = (isDone) ? 'none' : 'block';
+  document.getElementById('profiles').style.display = (isDone) ? 'block' : 'none';
+  document.getElementById('launcher').style.display = (isDone) ? 'block' : 'none';
+  document.querySelector('#profiles > code').innerText = localStorage.profiles;
+  document.querySelector('#launcher > code').innerText = localStorage.launcher;
 }
     </script>
     <style>
@@ -125,16 +128,23 @@ li:active {
     </style>
   </head>
   <body>
-    <p id=loading><img src="assets/infinity-loading.svg" />  Locating your Minecraft folder...</p>
-    <p id=done>Minecraft has been detected at
+    <p id=loading><img src="../assets/infinity-loading.svg" />  Locating your Minecraft folder...</p>
+
+    <p id=profiles>Minecraft config has been detected at
       <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.profiles }</code>
-      <button onclick="autodetect()">Auto-detect</button>
-      <button onclick="locate(event.target)">Incorrect?</button>
+      <button onclick="locate(event.target, { name: 'launcher_profiles', extensions: ['json'] })">Incorrect?</button>
     </p>
-    <ul></ul>
+
+    <p id=launcher>Minecraft launcher has been detected at
+      <code onclick='shell.showItemInFolder(this.innerText)'>${ localStorage.launcher }</code>
+      <button onclick="locate(event.target, { name: 'Executables', extensions: ['exe', 'app'] })">Incorrect?</button>
+    </p>
+
     <div id=advanced style="display: none;">
-      <img src="assets/infinity-loading.svg" /> Searching...
+      <img src="../assets/infinity-loading.svg" /> Searching...
       <button onclick="locate()">Locate</button>
     </div>
+    <ul></ul>
+    <button onclick="autodetect()">Auto-detect</button>
   </body>
 </html>

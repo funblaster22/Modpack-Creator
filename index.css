@@ -99,7 +99,7 @@ button {
 .danger {
   background-color: red;
   color: pink;
-  border: 2px solid darkred;
+  border: 2px solid darkred !important;
   font-variant: small-caps;
   font-weight: bold;
 }

@@ -29,7 +29,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     show: false,
-    icon: __dirname + 'assets/profile.jpg',
+    icon: __dirname + '\\assets\\profile.jpg',
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
