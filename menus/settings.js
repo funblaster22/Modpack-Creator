@@ -21,6 +21,16 @@ function openSettings(event) {
     $(`option:contains("${ selected }")`).attr('selected', '');
     item.addEventListener('change', changeSetting);
   });
+
+  // display installed mods
+  for (var mod of projectJSON.mods) {
+    let card = document.createElement('li');
+    card.innerText = mod.name + '\t';
+    card.className = 'search';
+    card.data = {urlName: mod.name}  // for compatibility with scanMod()
+    document.getElementById('installed-mods').appendChild(card);
+    $('<button onclick="scanMod(this)">Remove</button>').appendTo(card);
+  }
 }
 
 function changeSetting (event) {
