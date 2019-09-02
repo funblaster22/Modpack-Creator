@@ -1,9 +1,9 @@
-var file;
+var file, projectJSON;
 
 function openSettings(event) {
   //let html = fs.readFileSync('settings.html');
   file = JSON.parse(fs.readFileSync('projects.json'));
-  var projectJSON = file[selectedMod];
+  projectJSON = file[selectedMod];
   console.log(projectJSON);
   var settings = document.getElementById('settings').content.cloneNode(true);
   detailDiv.appendChild(settings);
