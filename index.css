@@ -68,7 +68,7 @@ button {
 #detail {
   width: 100%;
   animation-name: detail-expand;
-  animation-duration: 1s;
+  animation-duration: 500ms;
   animation-fill-mode: both;
   overflow-y: auto;
   display: block;

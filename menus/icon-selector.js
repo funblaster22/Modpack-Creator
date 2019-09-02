@@ -1,5 +1,5 @@
 function choosePic(event) {
-  //getName(event.target);  TODO:  wait to show until animation done
+  //openTab(event.target);  TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";
 
   fs.readdirSync(__dirname + '\\assets\\icons\\').forEach(file => {

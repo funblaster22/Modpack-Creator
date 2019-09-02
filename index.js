@@ -79,7 +79,7 @@ function initTooltips() {
   });
 }
 
-function getName(elem, name, callback) {  // elem = obj that was clicked  // TODO: rename to openTab
+function openTab(elem, name, callback) {  // elem = obj that was clicked
   $('input').attr("disabled", '');
   window.getSelection().removeAllRanges();
   if (detailDiv) {  //if already open
@@ -108,7 +108,7 @@ function getName(elem, name, callback) {  // elem = obj that was clicked  // TOD
 
   $('.flex').animate({
     top: -previous * $(dad).outerHeight() // replace with height of cell
-  }, 1000, callback);
+  }, 500, callback);
   $('html').css('overflow-y', 'hidden');
 }
 
@@ -117,7 +117,7 @@ function closeTab() {
   detailDiv.style.animationName = 'detail-retract';
   $('.flex').animate({
     top: 0 // replace with height of cell
-  }, 1000, function() {  // run when animation finishes
+  }, 500, function() {  // run when animation finishes
     $('html').css('overflow-y', 'auto');
     detailDiv.remove();
     detailDiv = undefined;
