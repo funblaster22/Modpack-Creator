@@ -1,3 +1,5 @@
 node_modules/
 profiles/
 builds/
+
+projects.json

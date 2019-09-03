@@ -1,22 +1,37 @@
 {
-  "Modcraft": {
+  "Natcat": {
+    "icon": "",
+    "allVersions": [],
+    "mods": [],
+    "settings": {
+      "memoryMin": 1000,
+      "memoryMax": 6000,
+      "MCversion": "Auto",
+      "forgeVersion": "Recommended",
+      "releaseType": "Release"
+    }
+  },
+  "\";alert('Youve been hacked!');//": {
+    "icon": "assets/icons/villager-house.jpg"
+  },
+  "DAB": {
     "icon": "assets/icons/dab.jpg",
     "allVersions": [
-      "1.12",
-      "1.6.4",
-      "1.7.2",
+      "1.8",
+      "1.8.9",
+      "1.10.2",
       "1.12.2",
       "1.7.10",
-      "1.8",
-      "1.6",
-      "1.7",
+      "1.6.4",
+      "1.9.4",
+      "1.11.2",
       "1.9",
       "1.10",
       "1.11",
-      "1.8.9",
-      "1.9.4",
-      "1.10.2",
-      "1.11.2"
+      "1.12",
+      "1.6",
+      "1.7",
+      "1.7.2"
     ],
     "mods": [
       {
@@ -61,29 +76,38 @@
           "1.10.2",
           "1.11.2"
         ]
+      },
+      {
+        "name": "thaumcraft",
+        "dependencies": [
+          "baubles"
+        ],
+        "supportedMCversions": [
+          "1.8",
+          "1.8.9",
+          "1.10.2",
+          "1.12.2",
+          "1.7.10",
+          "1.6.4",
+          "1.9.4",
+          "1.11.2",
+          "1.9",
+          "1.10",
+          "1.11",
+          "1.12",
+          "1.6",
+          "1.7",
+          "1.7.2"
+        ]
       }
     ],
     "settings": {
       "memoryMin": 1000,
       "memoryMax": 1000,
-      "MCversion": "Auto",
+      "MCversion": "1.12.2",
       "forgeVersion": "Recommended",
       "releaseType": "Beta"
-    }
-  },
-  "Natcat": {
-    "icon": "",
-    "allVersions": [],
-    "mods": [],
-    "settings": {
-      "memoryMin": 1000,
-      "memoryMax": 6000,
-      "MCversion": "Auto",
-      "forgeVersion": "Recommended",
-      "releaseType": "Release"
-    }
-  },
-  "\";alert('Youve been hacked!');//": {
-    "icon": "assets/icons/villager-house.jpg"
+    },
+    "forgeVersion": "1.12.2-forge1.12.2-14.23.5.2844"
   }
 }
