@@ -29,6 +29,7 @@ function autodetect() {
       break;
     case 'darwin':
       localStorage.profiles = os.homedir() + '\\Library\\Application Support\\minecraft';
+      localStorage.launcher = "/Applications/Minecraft.app";
       break;
     default:  // linux
       localStorage.profiles = os.homedir() + '\\.minecraft';

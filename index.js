@@ -123,3 +123,7 @@ function closeTab() {
     detailDiv = undefined;
   });
 }
+
+function negativeArrayIndex(array, negativeIndex=1) {
+  return array[array.length-Math.abs(negativeIndex)];
+}

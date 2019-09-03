@@ -1,12 +1,13 @@
-function editProjectsFile(edit) {  // TODO: rename to projectsFile
+function editProjectsFile(editFunc) {  // TODO: rename to projectsFile
   let data = JSON.parse(fs.readFileSync('projects.json'));
   let modInfo = data[selectedMod];
-  if (!edit) {
+  if (!editFunc) {
     return modInfo;
   }
-  data[selectedMod] = edit(modInfo);
+  data[selectedMod] = editFunc(modInfo);
   console.log(data);
-  fs.writeFileSync('projects.json', JSON.stringify(data, null, 2))
+  if (data[selectedMod] != null)
+    fs.writeFileSync('projects.json', JSON.stringify(data, null, 2))
 }
 
 function addMods() {
@@ -17,7 +18,7 @@ function addMods() {
   initTooltips();
 }
 
-function newSearch(url, loadingLocation=undefined) {
+function newSearch(url, loadingLocation=undefined, downloadTo=null) {  // TODO: loading bar
   if (loadingLocation)
     var loading = $('<img src="assets/infinity-loading.svg" />').appendTo(loadingLocation);
   if (!/^https?:\/\//.test(url))
@@ -26,7 +27,7 @@ function newSearch(url, loadingLocation=undefined) {
 
   // wrap a request in an promise
   return new Promise((resolve, reject) => {
-    request(url, (error, response, body) => {
+    let req = request(url, (error, response, body) => {
       if (loadingLocation)
         loading.remove();
       if (error) { reject(error); alert('You are not connected to the internet!'); }
@@ -42,6 +43,18 @@ function newSearch(url, loadingLocation=undefined) {
         doc = new DOMParser().parseFromString(body, 'text/html');
       resolve(doc);
     });
+
+    if (downloadTo) { console.log('DOWNLOADING TO ' + downloadTo);
+      let fileStream = fs.createWriteStream(downloadTo);
+      req.pipe(fileStream);
+      fileStream.on('finish', function() {
+        fileStream.close();  // close() is async, call cb after close completes.
+      })
+      .on('error', function(err) { // Handle errors
+        fs.unlink(downloadTo); // Delete the file async. (But we don't check the result)
+      });
+    }
+
   });
 }
 
