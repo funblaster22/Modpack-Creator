@@ -2,7 +2,7 @@ function play(target) {
   selectedMod = $(target).parent().prev('input').val();
   var file = editProjectsFile();
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion(file) : file.settings.MCversion;
-  console.log(bestVersion);
+  console.log('Using MC version ' + bestVersion);
 
   let path = app.getPath('userData') + '\\profiles\\' + selectedMod + '\\mods';
   console.log(path);
@@ -13,7 +13,7 @@ function play(target) {
     download(mod.name, filePath);
   }
 
-  //start MC launcher
+  /* start MC launcher  TODO: auto-install forge
   let profiles = JSON.parse(fs.readFileSync(localStorage.profiles)); // TODO: put in function
   let newProfile = {
     authenticationDatabase: profiles.authenticationDatabase,
@@ -34,7 +34,16 @@ function play(target) {
     if (err)
       throw err;
   });
-  child_process.execFile(localStorage.launcher, ['--workDir', app.getPath('userData')]);
+  child_process.execFile(localStorage.launcher, ['--workDir', app.getPath('userData')]);*/
+  exportMClauncher();
+  let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
+  let data = editProjectsFile()
+  if (!fs.existsSync(versionsFolderPath + data.forgeVersion)) {  // check if allready installed
+    installForge();
+    return;
+  }
+  child_process.execFile(localStorage.launcher);
+  console.log('Starting Launcher...');
 
 
   function findBestVersion(file) {
@@ -50,21 +59,37 @@ function play(target) {
       }
     }
     console.log(support);
-    return Object.keys(support).reduce((a, b) => support[a] > support[b] ? a : b);
+    // TODO: convert to function
+    return Object.keys(support).reduce((a, b) => support[a] > support[b] ? a : b);  // return item in object with heighest value
   }
 
-  async function download(modName, filePath) {
+  async function download(modName, filePath) {  // TODO: rename to downloadMod
     /* check for compatible mod versions then download */
-    let data = await newSearch("https://api.cfwidget.com/mc-mods/minecraft/" + modName + '?version=' + bestVersion); // '/beta'
+    let data = await newSearch("https://api.cfwidget.com/minecraft/mc-mods/" + modName + '?version=' + bestVersion); // '/beta'
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
-    var file = await newSearch(data.download.url + '/file');
-    fs.writeFile(filePath, file, "binary", (err) => {
-      if (err)
-        throw err;
-      //TODO: incriment loading bar
+
+    newSearch(data.download.url + '/file', null, filePath);
+  }
+
+  async function installForge() { console.log('Installing Forge...');
+    let html = await newSearch(`https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_${ bestVersion }.html`);
+    let installer = html.querySelector('.download a[title=Installer]');  // TODO: change reccomended/latest depending on preferences
+    installer.href = 'http://files.minecraftforge.net' + $(installer).attr('href');
+    let forgeName = negativeArrayIndex(installer.href.split('/'));
+    forgeName = forgeName.replace("forge-", "");
+    forgeName = forgeName.replace("-installer.jar", "");
+    let file = await newSearch(installer.href);
+    console.log(forgeName);
+
+    await newSearch(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
+
+    editProjectsFile(function(data) {
+      data.forgeVersion = bestVersion + '-forge' + forgeName;
+      return data;
     });
+    child_process.exec('java -jar ' + app.getPath("temp") + '\\forge-installer.jar');
   }
 
 }

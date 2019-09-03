@@ -12,6 +12,7 @@ const prompt = require('electron-prompt');
 const {dialog} = require('electron').remote;
 const fs = require('fs');
 const child_process = require('child_process');
+const pathlib = require('path');
 const app = electron.remote.app;
 delete window.require;
 delete window.exports;
@@ -29,6 +30,7 @@ delete window.module;
     <script src="menus/add-mods.js" type="text/javascript"></script>
     <script src="menus/settings.js" type="text/javascript"></script>
     <script src="menus/play.js" type="text/javascript"></script>
+    <script src="menus/import-export.js" type="text/javascript"></script>
     <script src="index.js" type="text/javascript"></script>
     <link rel = "stylesheet" type="text/css" href="index.css" />
     <link rel="icon" type="image/jpeg" href="assets/profile.jpg">
