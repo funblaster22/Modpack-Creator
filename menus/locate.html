@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="profile.jpg">
     <title>Locate</title>
     <script>
-const { dialog } = require('electron').remote;
+const { dialog, app } = require('electron').remote;
 const os = require('os');
 const find = require('find');
 const { shell } = require('electron');
@@ -147,5 +147,7 @@ li:active {
     </div>
     <ul></ul>
     <button onclick="autodetect()">Auto-detect</button>
+    <button onclick="shell.showItemInFolder(app.getPath('userData') + '\\profiles\\null');">
+      Open game folder</button> (texture packs, game saves, screenshots, etc)
   </body>
 </html>

@@ -1,6 +1,6 @@
 function play(target) {
-  selectedMod = $(target).parent().prev('input').val();
-  var file = editProjectsFile();
+  selectedMod = $(target).parent().prev('input').val();  //TODO: rename to selectedModpack
+  var file = editProjectsFile();  //TODO: rename to modpack
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion(file) : file.settings.MCversion;
   console.log('Using MC version ' + bestVersion);
 
@@ -10,7 +10,7 @@ function play(target) {
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
     if (fs.existsSync(filePath)) continue; // TODO: exception if updateOnRun set
-    download(mod.name, filePath);
+    downloadMod(mod, filePath);
   }
 
   /* start MC launcher  TODO: auto-install forge
@@ -63,13 +63,15 @@ function play(target) {
     return Object.keys(support).reduce((a, b) => support[a] > support[b] ? a : b);  // return item in object with heighest value
   }
 
-  async function download(modName, filePath) {  // TODO: rename to downloadMod
+  async function downloadMod(modInfo, filePath) {
     /* check for compatible mod versions then download */
-    let data = await newSearch("https://api.cfwidget.com/minecraft/mc-mods/" + modName + '?version=' + bestVersion); // '/beta'
+    let data = await newSearch("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
 
+    for (var dependancy of modInfo.dependencies)
+      downloadMod({name: dependancy, dependencies: []}, filePath.replace('.jar', `.${ dependancy }.jar`));
     newSearch(data.download.url + '/file', null, filePath);
   }
 
