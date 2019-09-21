@@ -16,6 +16,10 @@ if (localStorage.user != os.homedir()) {
 }
 
 fs.readFile('projects.json', function(err, data) {
+  if (err) {
+    fs.writeFileSync('projects.json', '{}');
+    data = '{}';
+  }
   projects = JSON.parse(data);
   $().ready(load);
 });
