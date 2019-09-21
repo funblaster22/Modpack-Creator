@@ -1,5 +1,6 @@
 const electron = require('electron');
 const { app, BrowserWindow, Menu, shell } = electron;  //https://electronjs.org/docs/tutorial/first-app
+const { autoUpdater } = require("electron-updater");
 
 function createPopup (website) {
   // Create the popup window.
@@ -26,6 +27,8 @@ function createPopup (website) {
 
 var win;
 function createWindow () {
+  autoUpdater.checkForUpdatesAndNotify();
+
   // Create the browser window.
   win = new BrowserWindow({
     show: false,
@@ -112,4 +115,4 @@ function createWindow () {
   });
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
