@@ -6,6 +6,7 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder",
+    "test": "electron-builder --dir",
     "publish": "electron-builder -w --x64 -p always"
   },
   "author": "Ed",

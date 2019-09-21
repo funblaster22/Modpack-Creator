@@ -2,7 +2,7 @@ function choosePic(event) {
   //openTab(event.target);  TODO:  wait to show until animation done
   detailDiv.className = "icon-selector";
 
-  fs.readdirSync(__dirname + '\\assets\\icons\\').forEach(file => {
+  fs.readdirSync(__dirname + '\\assets\\icons').forEach(file => {
     console.log(file);
     var img = document.createElement('img');
     img.src = 'assets/icons/' + file;
