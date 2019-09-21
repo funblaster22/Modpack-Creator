@@ -10,7 +10,11 @@ function play(target) {
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
     if (fs.existsSync(filePath)) continue; // TODO: exception if updateOnRun set
-    downloadMod(mod, filePath);
+    if (mod.url == undefined)
+      downloadMod(mod, filePath);
+    else {
+      downloadUnknownMod(mod.url, filePath);
+    }
   }
 
   /* start MC launcher  TODO: auto-install forge
@@ -73,6 +77,43 @@ function play(target) {
     for (var dependancy of modInfo.dependencies)
       downloadMod({name: dependancy, dependencies: []}, filePath.replace('.jar', `.${ dependancy }.jar`));
     newSearch(data.download.url + '/file', null, filePath);
+  }
+
+  async function downloadUnknownMod(url, savePath) {
+    let res = await newSearch(url);
+    const baseUrl = new URL(url).origin;
+    console.log("Current site: " + url);
+    if (res instanceof Document) {
+      for (var link of res.querySelectorAll('a[href]')) {
+        let label = link.innerText;
+        let href = urllib.resolve(url, $(link).attr('href'));
+        console.log(href);
+        if ((href.includes(bestVersion) || label.includes(bestVersion)) && href.includes(baseUrl)) { // TODO: determine if beta/alpha
+          return newSearch(href, null, savePath);
+        }
+      }
+      alert('Unable to find download link, must finish manually!');
+      shell.openExternal(url);
+    } else {
+      newSearch(url, null, savePath); // TODO: make more efficent only one request
+    }
+    /*print('Current site:', mod_url)
+
+        if r.headers['Content-Type'] == 'application/java-archive' or r.headers['Content-Type'] == 'application/zip':
+            print('Downloading {}...'.format(self.mod_name))
+            with open(SAVE_DIR + self.mod_name + '.jar', 'wb') as fd:
+                fd.write(r.content)
+        else:
+            d = pq(r.content)
+            for link in d('a[href]'):
+                label = d(link).text()
+                link = urljoin(mod_url, d(link).attr('href'))
+                if self.base_url in link and (MC_VERSION in link or MC_VERSION in label) and 'pre' not in link:
+                    return self.download_unknown_website(link)
+
+            print('Unable to find download link, must finish manually!', mod_url)
+            webbrowser.open_new_tab(mod_url)  # no matches found
+    */
   }
 
   async function installForge() { console.log('Installing Forge...');

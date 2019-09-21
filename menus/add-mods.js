@@ -21,7 +21,7 @@ function addMods() {
 function newSearch(url, loadingLocation=undefined, downloadTo=null) {  // TODO: loading bar
   if (loadingLocation)
     var loading = $('<img src="assets/infinity-loading.svg" />').appendTo(loadingLocation);
-  if (!/^https?:\/\//.test(url))
+  if (!isURL(url))
     url = 'https://www.curseforge.com/minecraft/mc-mods/' + url;
   console.log('FETCHING ', url);
 
@@ -30,11 +30,17 @@ function newSearch(url, loadingLocation=undefined, downloadTo=null) {  // TODO: 
     let req = request(url, (error, response, body) => {
       if (loadingLocation)
         loading.remove();
-      if (error) { reject(error); alert('You are not connected to the internet!'); }
-      if (response.statusCode != 200)
-        reject('Invalid status code <' + response.statusCode + '>');
+      if (error) { console.log(error.message);
+        if (error.message.includes("getaddrinfo ENOTFOUND"))
+          alert('You are not connected to the internet!');
+        // TODO: cannot type in search input after alert
+        reject(error); return;
+      }
+      if (response.statusCode != 200) {
+        reject('Invalid status code <' + response.statusCode + '>'); return;
+      }
 
-      var fileType = response.headers["content-type"]
+      var fileType = response.headers["content-type"];
       console.log(fileType);
       var doc = body;
       if (fileType.includes('application/json'))
@@ -67,6 +73,11 @@ async function parseSearch(event) {
   console.log(mods);
 
   let query = event.target.value;
+  if (isURL(query)) {
+    addUnknownMod(query);
+    return;
+  }
+
   $('.search').remove();
   var doc = await newSearch("search?search=" + query, detailDiv);
 
@@ -170,6 +181,44 @@ async function scanMod(self) {
       return file;
     });
   }
+}
+
+async function addUnknownMod(modUrl) {
+  try {  // ensure valid URL
+    let website = await newSearch(modUrl);
+    let websiteText = website.body.innerText;
+    var versions = [];
+    for (var match of websiteText.matchAll(/(Minecraft|MC) ([0-9]+\.[0-9]+)/gim)) {
+      if (!versions.includes(match[2]))
+        versions.push(match[2]);  // strip so only version number remains
+    }
+  } catch(err) {
+    alert(err);
+    return;
+  }
+  console.log(versions);
+
+  const shortName = await prompt({
+    title: 'New Mod',
+    label: 'Mod Name:',
+    icon: 'profile.png',
+    height: 150,
+    inputAttrs: {
+      type: 'text', required: true
+    }
+  });
+  if (isEmpty(shortName)) return;
+
+  editProjectsFile(function(file) {
+    file.allVersions = calcAllVersions(versions);
+    file.mods.push({
+	  name: shortName.toLowerCase(),
+      url: modUrl,
+      dependencies: [],
+      supportedMCversions: versions
+    });
+    return file;
+  });
 }
 
 function fillTemplate(template, dictionary) {

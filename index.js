@@ -46,7 +46,7 @@ function newModpack() {
     }
   })
   .then((result) => {
-    if($.trim(result).length === 0) {
+    if (isEmpty(result)) {
       console.log('user cancelled');
     } else {
       console.log('result: ', result);
@@ -127,3 +127,11 @@ function closeTab() {
 function negativeArrayIndex(array, negativeIndex=1) {
   return array[array.length-Math.abs(negativeIndex)];
 }
+
+function isURL(url) {
+  return /^https?:\/\//.test(url);
+}
+
+function isEmpty(str) {
+  return $.trim(str).length === 0;
+};
