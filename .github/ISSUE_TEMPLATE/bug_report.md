@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Log Output**
-If applicable, add log output in a seperate file (go to view->dev tools)
+If applicable, add log output in a separate file (go to view->dev tools)
 
 **About:**
  - OS: [e.g. Windows]
