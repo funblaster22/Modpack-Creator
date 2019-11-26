@@ -22,7 +22,6 @@ function changeIcon(icon) {
   fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
   dad.querySelector('img').src = icon.getAttribute("src");
   closeTab();
-  //location.reload();   TODO:  smooth transition
 }
 
 function uploadImg() {

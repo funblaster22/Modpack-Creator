@@ -18,52 +18,6 @@ function addMods() {
   initTooltips();
 }
 
-function newSearch(url, loadingLocation=undefined, downloadTo=null) {  // TODO: loading bar
-  if (loadingLocation)
-    var loading = $('<img src="assets/infinity-loading.svg" />').appendTo(loadingLocation);
-  if (!isURL(url))
-    url = 'https://www.curseforge.com/minecraft/mc-mods/' + url;
-  console.log('FETCHING ', url);
-
-  // wrap a request in an promise
-  return new Promise((resolve, reject) => {
-    let req = request(url, (error, response, body) => {
-      if (loadingLocation)
-        loading.remove();
-      if (error) { console.log(error.message);
-        if (error.message.includes("getaddrinfo ENOTFOUND"))
-          alert('You are not connected to the internet!');
-        // TODO: cannot type in search input after alert
-        reject(error); return;
-      }
-      if (response.statusCode != 200) {
-        reject('Invalid status code <' + response.statusCode + '>'); return;
-      }
-
-      var fileType = response.headers["content-type"];
-      console.log(fileType);
-      var doc = body;
-      if (fileType.includes('application/json'))
-        doc = JSON.parse(body);
-      else if (fileType.includes('text/html'))
-        doc = new DOMParser().parseFromString(body, 'text/html');
-      resolve(doc);
-    });
-
-    if (downloadTo) { console.log('DOWNLOADING TO ' + downloadTo);
-      let fileStream = fs.createWriteStream(downloadTo);
-      req.pipe(fileStream);
-      fileStream.on('finish', function() {
-        fileStream.close();  // close() is async, call cb after close completes.
-      })
-      .on('error', function(err) { // Handle errors
-        fs.unlink(downloadTo); // Delete the file async. (But we don't check the result)
-      });
-    }
-
-  });
-}
-
 async function parseSearch(event) {
   let file = editProjectsFile();
   var mods = []; // change to installedMods
@@ -154,7 +108,7 @@ async function scanMod(self) {
   var searchCard = $(self).closest('.search')[0];
   if (self.innerText == 'Add') {
     self.innerText = 'Remove';
-    var data = await newSearch('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self)
+    var data = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self)
     console.log(data);
     let versions = Object.keys(data.versions);
     let dependencies = await findDependencies(searchCard);

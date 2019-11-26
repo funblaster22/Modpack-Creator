@@ -37,7 +37,22 @@ function load() {
     flexbox.appendChild(cell);
   }
   $(`<div style="border:none;"><button class=rounded-button onclick=newModpack()>New</button></div>`).appendTo('.flex');
+
+  if (localStorage.theme == 'dark') document.getElementById('theme').rel = 'stylesheet';
 }
+
+ipcRenderer.on('toggle-theme', function (event, text) {
+  console.log('RECIEVED toggle-theme');
+  if (localStorage.theme == "dark") {
+    document.getElementById('theme').rel = 'disabled';
+    localStorage.theme = "light";
+  } else {
+    document.getElementById('theme').rel = 'stylesheet';
+    localStorage.theme = "dark";
+  }
+});
+
+ipcRenderer.on('new-modpack', newModpack);
 
 function newModpack() {
   prompt({

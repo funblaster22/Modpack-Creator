@@ -69,7 +69,7 @@ function play(target) {
 
   async function downloadMod(modInfo, filePath) {
     /* check for compatible mod versions then download */
-    let data = await newSearch("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
+    let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
@@ -80,7 +80,7 @@ function play(target) {
   }
 
   async function downloadUnknownMod(url, savePath) {
-    let res = await newSearch(url);
+    let res = await newSearchRaw(url);
     const baseUrl = new URL(url).origin;
     console.log("Current site: " + url);
     if (res instanceof Document) {
@@ -119,19 +119,22 @@ function play(target) {
   async function installForge() { console.log('Installing Forge...');
     let html = await newSearch(`https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_${ bestVersion }.html`);
     let installer = html.querySelector('.download a[title=Installer]');  // TODO: change reccomended/latest depending on preferences
-    installer.href = 'http://files.minecraftforge.net' + $(installer).attr('href');
+    // alt:  .info-link.tooltipstered[href]
+    installer.href = negativeArrayIndex(installer.href.split('='));
     let forgeName = negativeArrayIndex(installer.href.split('/'));
     forgeName = forgeName.replace("forge-", "");
     forgeName = forgeName.replace("-installer.jar", "");
-    let file = await newSearch(installer.href);
+    //let file = await newSearchRaw(installer.href);
     console.log(forgeName);
 
-    await newSearch(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
+    await newSearchRaw(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
 
     editProjectsFile(function(data) {
       data.forgeVersion = bestVersion + '-forge' + forgeName;
       return data;
     });
+    alert("Installing MC Forge. When prompted, press ok and do not change any settings. "+
+          "Afterwards, press play again (you may need to change the profile once in the launcher)");
     child_process.exec('java -jar ' + app.getPath("temp") + '\\forge-installer.jar');
   }
 
