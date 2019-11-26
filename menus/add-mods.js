@@ -1,12 +1,12 @@
 function editProjectsFile(editFunc) {  // TODO: rename to projectsFile
   let data = JSON.parse(fs.readFileSync('projects.json'));
-  let modInfo = data[selectedMod];
+  let modInfo = data[selectedModpack];
   if (!editFunc) {
     return modInfo;
   }
-  data[selectedMod] = editFunc(modInfo);
+  data[selectedModpack] = editFunc(modInfo);
   console.log(data);
-  if (data[selectedMod] != null)
+  if (data[selectedModpack] != null)
     fs.writeFileSync('projects.json', JSON.stringify(data, null, 2))
 }
 

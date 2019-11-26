@@ -1,10 +1,10 @@
 function play(target) {
-  selectedMod = $(target).parent().prev('input').val();  //TODO: rename to selectedModpack
+  selectedModpack = $(target).parent().prev('input').val();
   var file = editProjectsFile();  //TODO: rename to modpack
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion(file) : file.settings.MCversion;
   console.log('Using MC version ' + bestVersion);
 
-  let path = app.getPath('userData') + '\\profiles\\' + selectedMod + '\\mods';
+  let path = app.getPath('userData') + '\\profiles\\' + makeSafe(selectedModpack) + '\\mods';
   console.log(path);
   fs.mkdirSync(path, { recursive: true });
   for (var mod of file.mods) {
@@ -23,11 +23,11 @@ function play(target) {
     authenticationDatabase: profiles.authenticationDatabase,
     clientToken: profiles.clientToken,
     profiles : {
-      selectedMod : {
-        "gameDir" : app.getPath('userData') + "\\profiles\\" + selectedMod,
+      selectedModpack : {
+        "gameDir" : app.getPath('userData') + "\\profiles\\" + makeSafe(selectedModpack),
         "icon" : "Furnace",
         "lastVersionId" : "1.7.10-Forge10.13.4.1558-1.7.10",
-        "name" : selectedMod,
+        "name" : selectedModpack,
         "type" : "custom"
       }
     }

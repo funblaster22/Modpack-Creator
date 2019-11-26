@@ -1,6 +1,6 @@
 var debug;
-var selectedMod;
-var dad;
+var selectedModpack;
+var modpackContainer;
 var projects;
 var detailDiv;
 
@@ -98,7 +98,12 @@ function initTooltips() {
   });
 }
 
-function openTab(elem, name, callback) {  // elem = obj that was clicked
+function openTab(elem, name, callback) {
+  /**
+  @param {HTMLElement} elem = obj that was clicked
+  @param {string} name = name of tab (eg settings, add-mods, icon, etc)
+  @param {function} callback = function to call when animation complete
+  */
   $('input').attr("disabled", '');
   window.getSelection().removeAllRanges();
   if (detailDiv) {  //if already open
@@ -111,22 +116,18 @@ function openTab(elem, name, callback) {  // elem = obj that was clicked
     return;
   }
 
-  dad = elem.parentElement;  // dad = main elem containing all info for single modpack
-  while (dad.className != '') {  // b/c buttons are nested inside another div
-    console.log('up');
-    elem = dad
-    dad = elem.parentElement;
-  }
-  selectedMod = dad.querySelector('input').value;
+  modpackContainer = $(elem).closest('div:not(.button-container)')[0];
+  // b/c buttons are nested inside another div
+  selectedModpack = $(modpackContainer).find('input').val();
   detailDiv = document.createElement('div');
   detailDiv.id = 'detail';
   detailDiv.className = name;
-  $(detailDiv).insertAfter(dad);
+  $(detailDiv).insertAfter(modpackContainer);
 
-  let previous = $(dad).prevAll().length;  // number of previous siblings (for animation)
+  let previous = $(modpackContainer).prevAll().length;  // number of previous siblings (for animation)
 
   $('.flex').animate({
-    top: -previous * $(dad).outerHeight() // replace with height of cell
+    top: -previous * $(modpackContainer).outerHeight() // replace with height of cell
   }, 500, callback);
   $('html').css('overflow-y', 'hidden');
 }
@@ -154,3 +155,7 @@ function isURL(url) {
 function isEmpty(str) {
   return $.trim(str).length === 0;
 };
+
+function makeSafe(str) {
+  return str.replace(/[^\w\d\s]/gi, '').trim();
+}
