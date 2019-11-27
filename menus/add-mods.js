@@ -1,5 +1,5 @@
 function editProjectsFile(editFunc) {  // TODO: rename to projectsFile
-  let data = JSON.parse(fs.readFileSync('projects.json'));
+  let data = JSON.parse(fs.readFileSync(PROJECTS_JSON));
   let modInfo = data[selectedModpack];
   if (!editFunc) {
     return modInfo;
@@ -7,7 +7,7 @@ function editProjectsFile(editFunc) {  // TODO: rename to projectsFile
   data[selectedModpack] = editFunc(modInfo);
   console.log(data);
   if (data[selectedModpack] != null)
-    fs.writeFileSync('projects.json', JSON.stringify(data, null, 2))
+    fs.writeFileSync(PROJECTS_JSON, JSON.stringify(data, null, 2))
 }
 
 function addMods() {

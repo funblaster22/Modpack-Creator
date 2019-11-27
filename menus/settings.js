@@ -2,7 +2,7 @@ var file, projectJSON;
 
 function openSettings(event) {
   //let html = fs.readFileSync('settings.html');
-  file = JSON.parse(fs.readFileSync('projects.json'));
+  file = JSON.parse(fs.readFileSync(PROJECTS_JSON));
   projectJSON = file[selectedModpack];
   console.log(projectJSON);
   var settings = document.getElementById('settings').content.cloneNode(true);
@@ -38,14 +38,14 @@ function changeSetting (event) {
   var selected = target.querySelector('option:checked').innerText;
   projectJSON.settings[event.target.id] = selected;
   file[selectedModpack] = projectJSON;
-  fs.writeFileSync('projects.json', JSON.stringify(file, null, 2));
+  fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
 }
 
 function changeName(self) {  // TODO: retain order or add sort by (name, played, custom)
   file[self.value] = file[selectedModpack];
   delete file[selectedModpack];
   selectedModpack = self.value;
-  fs.writeFileSync('projects.json', JSON.stringify(file, null, 2));
+  fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
 }
 
 function confirmDelete() {
@@ -59,7 +59,7 @@ function confirmDelete() {
   if (result == 0) {
     console.log('deleted');
     delete file[selectedModpack];
-    fs.writeFileSync('projects.json', JSON.stringify(file, null, 2));
+    fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
     closeTab();
     modpackContainer.remove();
   }

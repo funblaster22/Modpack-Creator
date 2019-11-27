@@ -15,9 +15,9 @@ if (localStorage.user != os.homedir()) {
   window.open('menus/locate.html');
 }
 
-fs.readFile('projects.json', function(err, data) {
+fs.readFile(PROJECTS_JSON, function(err, data) {
   if (err) {
-    fs.writeFileSync('projects.json', '{}');
+    fs.writeFileSync(PROJECTS_JSON, '{}');
     data = '{}';
   }
   projects = JSON.parse(data);
@@ -69,7 +69,7 @@ function newModpack() {
       console.log('user cancelled');
     } else {
       console.log('result: ', result);
-      var data = fs.readFileSync('projects.json');
+      var data = fs.readFileSync(PROJECTS_JSON);
       var projects = JSON.parse(data);
       projects[result] = {
         "icon": "",
@@ -83,7 +83,7 @@ function newModpack() {
           "releaseType": "Release"
         }
       };
-      fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
+      fs.writeFileSync(PROJECTS_JSON, JSON.stringify(projects, null, 2));
       location.reload();
     }
   })

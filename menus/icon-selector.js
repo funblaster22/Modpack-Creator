@@ -16,10 +16,10 @@ function choosePic(event) {
 }
 
 function changeIcon(icon) {
-  var data = fs.readFileSync('projects.json');
+  var data = fs.readFileSync(PROJECTS_JSON);
   var projects = JSON.parse(data);
   projects[selectedModpack].icon = icon.getAttribute("src");
-  fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
+  fs.writeFileSync(PROJECTS_JSON, JSON.stringify(projects, null, 2));
   modpackContainer.querySelector('img').src = icon.getAttribute("src");
   closeTab();
 }

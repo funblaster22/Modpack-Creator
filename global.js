@@ -1,3 +1,5 @@
+const PROJECTS_JSON = app.getPath('userData') + '\\projects.json';
+
 function newSearchRaw(url, loadingLocation=undefined, downloadTo=null) {  // TODO: loading bar
    // TODO: aconvert to dedicated download function
   if (loadingLocation)
