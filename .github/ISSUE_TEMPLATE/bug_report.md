@@ -31,8 +31,8 @@ If applicable, add log output in a separate file (go to view->dev tools)
  - App Version: (go to help->about) [e.g. 1.2, 0.1.0-beta]
 
 **Please assess the severity of the problem:**
-- [ ] severe (crash, unplayable, feature not working, etc)
-- [ ] minor (graphical, performance, etc)
+[ ] severe (crash, unplayable, feature not working, etc)
+[ ] minor (graphical, performance, etc)
 
 **Additional context**
 Add any other context about the problem here.
