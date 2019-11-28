@@ -27,6 +27,22 @@ button {
   cursor: pointer;
 }
 
+table, td, th {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th {
+  position: sticky;
+  top: -10px;
+  background-color: lightgrey;
+}
+
+#best-version {
+  background-color: lightgreen;
+}
+
 .flex {
   position: absolute;
   width: 100vw;

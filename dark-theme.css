@@ -14,3 +14,15 @@ button, input, select {
 img {
   box-shadow: black 5px 5px 10px !important;
 }
+
+th {
+  background-color: grey !important;
+}
+
+table, td, th {
+  border: 1px solid white;
+}
+
+#best-version {
+  background-color: green !important;
+}

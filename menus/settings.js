@@ -9,7 +9,6 @@ function openSettings(event) {
   detailDiv.appendChild(settings);
   multirange(document.querySelector('input[multiple]'));
   $('input[disabled]').removeAttr("disabled");
-  initTooltips();
 
   for (var version of projectJSON.allVersions) {  // populate MC versions
     let option = document.createElement('option');
@@ -22,15 +21,37 @@ function openSettings(event) {
     item.addEventListener('change', changeSetting);
   });
 
+  var bestVersion = findBestVersion();
+  for (var version of projectJSON.allVersions) {
+    let temp = $('<th>'+ version +'</th>').appendTo('#installed-mods tr');
+    if (version == bestVersion) {
+      $('<span class=help title="Most compatible MC version (used when set to auto)"></span>')
+        .prependTo(temp);
+      temp.attr('id', "best-version");
+    }
+  }
+
   // display installed mods
   for (var mod of projectJSON.mods) {
-    let card = document.createElement('li');
-    card.innerText = mod.name + '\t';
+    let row = document.createElement('tr');
+    let card = document.createElement('td');
+    card.innerText = mod.name + '    ';
     card.className = 'search';
-    card.data = {urlName: mod.name}  // for compatibility with scanMod()
-    document.getElementById('installed-mods').appendChild(card);
+    card.data = {urlName: mod.name}  // TODO for compatibility with scanMod()
     $('<button onclick="scanMod(this)">Remove</button>').appendTo(card);
+
+    row.appendChild(card);
+    document.getElementById('installed-mods').appendChild(row);
+
+    for (var version of projectJSON.allVersions) {
+      let cell = document.createElement('td');
+      if (mod.supportedMCversions.includes(version))
+        cell.innerText = 'X';
+      row.appendChild(cell);
+    }
   }
+
+  initTooltips();
 }
 
 function changeSetting (event) {
