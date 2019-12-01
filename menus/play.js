@@ -7,6 +7,12 @@ function play(target) {
   let path = app.getPath('userData') + '\\profiles\\' + makeSafe(selectedModpack) + '\\mods';
   console.log(path);
   fs.mkdirSync(path, { recursive: true });
+
+  var downloadedMods = [];
+  for (var file of fs.readdirSync(path))
+    downloadedMods.push(negativeArrayIndex(file.split('.'), 2));
+  console.log("Downloaded Mods:", downloadedMods);
+
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
     if (fs.existsSync(filePath)) continue; // TODO: exception if updateOnRun set
@@ -27,16 +33,18 @@ function play(target) {
   child_process.execFile(localStorage.launcher);
   console.log('Starting Launcher...');
 
-
   async function downloadMod(modInfo, filePath) {
+    for (var dependancy of modInfo.dependencies)
+      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy)}, filePath.replace('.jar', `.${ dependancy }.jar`));
+
+    if (downloadedMods.includes(modInfo.name)) return; // prevent duplicate mods
+    downloadedMods.push(modInfo.name);
+
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
-
-    for (var dependancy of modInfo.dependencies)
-      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy)}, filePath.replace('.jar', `.${ dependancy }.jar`));
     newSearch(data.download.url + '/file', null, filePath);
   }
 
