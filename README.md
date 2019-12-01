@@ -9,9 +9,9 @@ Features:
  - Search [Curseforge](https://www.curseforge.com/minecraft/mc-mods) (or add from external sites)
 
 ## Screenshots
-![main screen](home.png)
-![settings](settings.png)
-![add mods](add-mods.png)
+![main screen](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/home.png)
+![settings](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/settings.png)
+![add mods](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/add-mods.png)
 
 ## How to Install
 1. Click on the [releases](https://github.com/funblaster22/Modpack-Creator/releases) tab
