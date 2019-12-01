@@ -36,7 +36,7 @@ function play(target) {
     }*/
 
     for (var dependancy of modInfo.dependencies)
-      downloadMod({name: dependancy, dependencies: []}, filePath.replace('.jar', `.${ dependancy }.jar`));
+      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy)}, filePath.replace('.jar', `.${ dependancy }.jar`));
     newSearch(data.download.url + '/file', null, filePath);
   }
 

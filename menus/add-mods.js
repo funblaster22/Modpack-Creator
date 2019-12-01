@@ -82,9 +82,9 @@ async function showDetails(target) {
   }
 }
 
-async function findDependencies(searchCard) {
+async function findDependencies(modName) {
   let dependencies = [];
-  var doc = await newSearch('https://www.curseforge.com/minecraft/mc-mods/' + searchCard.data.urlName + '/relations/dependencies')
+  var doc = await newSearch('https://www.curseforge.com/minecraft/mc-mods/' + modName + '/relations/dependencies')
   doc.querySelectorAll('.project-listing-row').forEach(function(item, index) {
     item = item.querySelector('h3');
     item = item.parentElement.href.split('/');
@@ -111,7 +111,7 @@ async function scanMod(self) {
     var data = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self)
     console.log(data);
     let versions = Object.keys(data.versions);
-    let dependencies = await findDependencies(searchCard);
+    let dependencies = await findDependencies(searchCard.data.urlName);
     editProjectsFile(function(file) {
       file.allVersions = calcAllVersions(versions);
       file.mods.push({
