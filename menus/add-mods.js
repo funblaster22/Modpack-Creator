@@ -95,7 +95,7 @@ async function findDependencies(modName) {
 
 function calcAllVersions(startValues) {
   let mods = editProjectsFile().mods;
-  let allVersions = startValues || [];
+  let allVersions = [...startValues] || [];
   for (var mod of mods) { for (var MCversion of mod.supportedMCversions) {
     if (!allVersions.includes(MCversion)) {
       allVersions.push(MCversion);
