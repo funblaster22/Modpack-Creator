@@ -77,7 +77,8 @@ function newModpack() {
         "mods": [],
         "settings": {
           "memoryMin": 1000,
-          "memoryMax": 6000,
+          "memoryMax": 4000,
+          "JVMArgs": "",
           "MCversion": "Auto",
           "forgeVersion": "Recommended",
           "releaseType": "Release"

@@ -9,7 +9,7 @@ function play(target) {
   fs.mkdirSync(path, { recursive: true });
 
   var downloadedMods = [];
-  for (var file of fs.readdirSync(path))
+  for (let file of fs.readdirSync(path))
     downloadedMods.push(negativeArrayIndex(file.split('.'), 2));
   console.log("Downloaded Mods:", downloadedMods);
 

@@ -3,3 +3,4 @@ profiles/
 dist/
 
 forge-installer.jar.log
+.tern-project

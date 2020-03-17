@@ -70,10 +70,18 @@ delete window.module;
       </li>
     </template>
     <template id=settings>
-      <div>Memory
-        <span class=help title='The minimum + maximum amount of RAM Minecraft gets. More mods requires more memory (reccomended 1-6 Gigabytes)'></span>
-        <input type="range" multiple value="10,80" style='display: block;
-        width: calc(100% - 20px);' />
+      <div id=memory>Memory
+        <span class=help title='The minimum & maximum amount of RAM Minecraft gets. More mods requires more memory (reccomended 3-6 Gigabytes)'></span>
+        <input type="range" multiple value="40,90" step="0.1" style='display: block;
+        width: calc(100% - 20px);' oninput="memUpdateHandler(this)" />
+        <div style="display: flex">
+          <span style="background-color: red; width: 20%;">0-2 GB</span>
+          <span style="background-color: orange; width: 20%;">2-4 GB</span>
+          <span style="background-color: green; width: 50%;">4-9 GB</span>
+          <span style="background-color: orange; width: 10%;">9-10 GB</span>
+        </div>
+        <p>Min memory: <input type=number min=0 step=100 id="mem-min" oninput="memUpdateHandler(this)" /> MB&emsp;
+        Max memory: <input type=number min=0 step=100 id="mem-max" oninput="memUpdateHandler(this)" /> MB</p>
       </div>
 
       <div>MC version
@@ -107,9 +115,10 @@ delete window.module;
         </table>
       </div>
 
-      <a href='#' onclick='$("#advanced").toggle();'>Advanced</a>
+      <a href='#' onclick='$("#advanced").toggle(); detailDiv.scroll(0, detailDiv.scrollHeight)'>Advanced</a>
 
       <div id=advanced>
+        JVM Arguments: <input name=JVMArgs onchange="changeTextareaSetting(this, true)" /><br />
         <button class=danger onclick='confirmDelete()'>DELETE</button>
       </div>
     </template>

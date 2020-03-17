@@ -1,4 +1,5 @@
 function exportMClauncher() {
+  var mySettings = editProjectsFile().settings;
   let profile = JSON.parse(fs.readFileSync(localStorage.profiles));
   let forgeVersion = editProjectsFile().forgeVersion;
   profile.profiles[selectedModpack] = {
@@ -6,6 +7,7 @@ function exportMClauncher() {
     // and it only works for this app's profiles, not Minecraft Launcher's
     "gameDir" : app.getPath('userData') + "\\profiles\\" + makeSafe(selectedModpack),
     "icon" : "Furnace",
+    "javaArgs": `-Xms${mySettings.memoryMin}M -Xmx${mySettings.memoryMax}M ${mySettings.JVMArgs}`,
     "lastVersionId" : forgeVersion,
     "name" : selectedModpack,
     "type" : "custom"

@@ -51,7 +51,66 @@ function openSettings(event) {
     }
   }
 
+  changeTextareaSetting($('[name=JVMArgs]')[0], false)
+  prepMemSlider()
   initTooltips();
+}
+
+function prepMemSlider() {
+  const totalRAM = Math.floor(os.totalmem() / 1e9); // in gb
+  //memUpdateHandler(document.querySelector('.multirange'));
+  $('.settings #memory input:not(.multirange)').attr('max', totalRAM * 1000);
+  var i = 0;
+  for (var range of document.querySelectorAll('#memory > div > span')) {
+    var gb = i + totalRAM * Number.parseInt(range.style.width) / 100;
+    range.innerText = `${i}-${gb} GB`;
+    i = gb;
+  }
+
+  editProjectsFile(function(data) {
+    $('#mem-min').val(data.settings.memoryMin);
+    $('#mem-max').val(data.settings.memoryMax);
+    memUpdateHandler(document.getElementById("mem-max"));
+  });
+}
+
+/**
+@param {HTMLInputElement} self
+*/
+function memUpdateHandler(self) {
+  const totalRAM = Math.floor(os.totalmem() / 1e9) * 1000; // in mb
+  if (self.classList.contains('multirange')) {
+    $('#mem-min').val(totalRAM * self.valueLow / 100);
+    $('#mem-max').val(totalRAM * self.valueHigh / 100);
+  } else {
+    var maxVal = Number.parseInt(self.max);
+    // ensure memory within range
+    self.value = (self.value < 0) ? 0 : (self.value > maxVal) ? maxVal : self.value;
+    document.querySelector(".multirange").value = $('#mem-min').val() / totalRAM * 100
+      + "," + $('#mem-max').val() / totalRAM * 100;
+  }
+
+  // save to file
+  editProjectsFile(function(data) {
+    data.settings.memoryMin = Math.min(document.getElementById('mem-min').valueAsNumber, document.getElementById('mem-max').valueAsNumber);
+    data.settings.memoryMax = Math.max(document.getElementById('mem-min').valueAsNumber, document.getElementById('mem-max').valueAsNumber);
+    return data;
+  });
+}
+
+/**
+Store/retrieve settings data for any input text element
+@param {HTMLInputElement} elem
+@param {Boolean} save - wheather to write new value to projects file or load
+*/
+function changeTextareaSetting (elem, save=false) {
+  editProjectsFile(function(data) {
+    if (save) {
+      data.settings[elem.name] = elem.value;
+      return data;
+    }
+    elem.value = data.settings[elem.name];
+  });
 }
 
 function changeSetting (event) {
