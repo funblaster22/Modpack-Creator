@@ -124,8 +124,10 @@ function changeSetting (event) {
 function changeName(self) {  // TODO: retain order or add sort by (name, played, custom)
   file[self.value] = file[selectedModpack];
   delete file[selectedModpack];
-  selectedModpack = self.value;
+  var prefix = app.getPath('userData') + '\\profiles\\';
+  fs.renameSync(prefix + makeSafe(selectedModpack), prefix + makeSafe(self.value));
   fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
+  selectedModpack = self.value;
 }
 
 function confirmDelete() {
