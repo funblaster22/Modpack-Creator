@@ -121,10 +121,10 @@ function removeDuplicateVersions(allVersions) {
   }
   console.log(allVersions, versionsToDelete);
   return allVersions;
+}
 
-  function getBaseVersion(ver) {
-    return ver.split('.').slice(0, 2).join('.')
-  }
+function getBaseVersion(ver) {
+  return ver.split('.').slice(0, 2).join('.')
 }
 
 async function scanMod(self) {
