@@ -84,7 +84,7 @@ async function showDetails(target) {
 
 async function findDependencies(modName) {
   let dependencies = [];
-  var doc = await newSearch('https://www.curseforge.com/minecraft/mc-mods/' + modName + '/relations/dependencies')
+  var doc = await newSearch('https://www.curseforge.com/minecraft/mc-mods/' + modName + '/relations/dependencies?filter-related-dependencies=3')
   doc.querySelectorAll('.project-listing-row').forEach(function(item, index) {
     item = item.querySelector('h3');
     item = item.parentElement.href.split('/');

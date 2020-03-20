@@ -1,6 +1,6 @@
 {
   "name": "Auto-Mod-Updater",
-  "version": "0.3.1-beta",
+  "version": "0.3.2-beta",
   "description": "Easily add and update mods",
   "main": "main.js",
   "scripts": {

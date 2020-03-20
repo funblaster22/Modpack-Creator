@@ -46,7 +46,9 @@ function play(target) {
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
-    newSearch(data.download.url + '/file', null, filePath);
+    newSearch(data.download.url.replace('files', 'download') + '/file', null, filePath);
+    // OLD https://www.curseforge.com/minecraft/mc-mods/quark/files/2746011/file
+    // NEW https://www.curseforge.com/minecraft/mc-mods/quark/download/2746011/file
   }
 
   async function downloadUnknownMod(url, savePath) {
