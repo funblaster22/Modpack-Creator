@@ -1,6 +1,6 @@
 {
   "name": "Auto-Mod-Updater",
-  "version": "0.3.0-beta",
+  "version": "0.3.1-beta",
   "description": "Easily add and update mods",
   "main": "main.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "electron-builder": "^21.2.0"
   },
   "dependencies": {
+    "compare-versions": "^3.6.0",
     "electron-prompt": "^1.5.1",
     "electron-updater": "^4.2.5",
     "find": "^0.3.0",

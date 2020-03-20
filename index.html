@@ -12,6 +12,7 @@ const prompt = require('electron-prompt');
 const {dialog} = require('electron').remote;
 const fs = require('fs');
 const child_process = require('child_process');
+const compareVersions = require("compare-versions");
 const pathlib = require('path');
 const urllib = require('url');
 const app = electron.remote.app;

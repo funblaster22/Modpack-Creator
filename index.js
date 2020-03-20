@@ -159,4 +159,5 @@ function isEmpty(str) {
 
 function makeSafe(str) {
   return str.replace(/[^\w\d\s]/gi, '').trim();
+  // Mathches everything except letters (\w), numbers (\d), or whitespace (\s)
 }
