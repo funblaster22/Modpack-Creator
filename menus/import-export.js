@@ -15,8 +15,5 @@ function exportMClauncher() {
 
   console.log(profile);
   let newProfile = JSON.stringify(profile, null, 2);
-  fs.writeFile(localStorage.profiles, newProfile, (err) => {
-    if (err)
-      throw err;
-  });
+  fs.writeFileSync(localStorage.profiles, newProfile);
 }

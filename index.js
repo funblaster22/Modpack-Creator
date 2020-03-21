@@ -52,6 +52,15 @@ ipcRenderer.on('toggle-theme', function (event, text) {
   }
 });
 
+ipcRenderer.on('modpack-info', function(event, msg) {
+  console.log(event, msg);
+  projectJSON = editProjectsFile();
+  if (msg == 'export' && projectJSON == undefined)
+    alert("Select a mod to export first");
+  else
+    ipcRenderer.send('modpack-info', {...projectJSON, name: selectedModpack, bestVersion: findBestVersion()});
+});
+
 ipcRenderer.on('new-modpack', newModpack);
 
 function newModpack() {

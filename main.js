@@ -1,6 +1,8 @@
 const electron = require('electron');
-const { app, BrowserWindow, Menu, shell, ipcMain } = electron;  //https://electronjs.org/docs/tutorial/first-app
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = electron;  //https://electronjs.org/docs/tutorial/first-app
 const { autoUpdater } = require("electron-updater");
+const fs = require("fs-extra");
+var archiver = require('archiver');
 
 function createPopup (website) {
   // Create the popup window.
@@ -49,7 +51,12 @@ function createWindow () {
         { label:'&New Modpack',
           click() { win.webContents.send('new-modpack'); }
         },
-        {label:'Export', submenu: [{label:'Twitch'}, {label:'MultiMC'}, {label:'Minecraft Launcher'}, {label:'Auto Mod Updater'}]},
+        {label:'Export', submenu: [
+          {label:'Twitch'},
+          {label:'MultiMC', click() { exportModpack('multimc') }},
+          {label:'Minecraft Launcher', click() { exportModpack('launcher')}},
+          {label:'Auto Mod Updater', click() { exportModpack('self')}}
+        ]},
         {label:'Import', submenu: [{label:'Twitch'}, {label:'MultiMC'}, {label:'Minecraft Launcher'}, {label:'Auto Mod Updater'}]},
         {role:'quit'}
         ]
@@ -78,7 +85,11 @@ function createWindow () {
           click (item, focusedWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools()
           }
-        }
+        },
+        { type: 'separator' },
+        { role: 'resetzoom' },
+        { role: 'zoomin', accelerator: "Ctrl+=" },
+        { role: 'zoomout' }
       ]
     },
     {
@@ -149,6 +160,51 @@ ipcMain.on('download-to', (event, arg) => {
   saveTo[arg[0]] = arg[1];
   // assoc. with url so knows correct save name if multiple downloads running
 });
+
+function exportModpack(target) {
+  var exportTo = dialog.showOpenDialog(win, { properties: ['openDirectory'] });
+  win.webContents.send('modpack-info', 'export');
+  ipcMain.on('modpack-info', (event, arg) => {
+    console.log(arg.name);
+    switch (target) {
+      case 'multimc':
+        var newFolder = exportTo[0]+'\\'+arg.name;
+        var output = fs.createWriteStream(newFolder + '.zip');
+        var archive = archiver('zip');
+        archive.pipe(output);
+        fs.mkdirSync(newFolder+'\\.minecraft', { recursive: true });
+        fs.writeFileSync(newFolder+'\\.packignore', '.minecraft');
+        fs.writeFileSync(newFolder+'\\instance.cfg', "InstanceType=OneSix\n");
+        fs.writeFileSync(newFolder+'\\mmc-pack.json', `{
+  "components": [
+    {
+      "cachedName": "Minecraft",
+      "important": true,
+      "uid": "net.minecraft",
+      "version": "${(arg.settings.MCversion == 'auto') ? arg.bestVersion : arg.settings.MCversion}"
+    }
+  ],
+  "formatVersion": 1
+}`);
+        fs.copySync(app.getPath('userData') + '\\profiles\\'+arg.name, newFolder+'\\.minecraft');
+
+        output.on('finish', function() {
+          fs.removeSync(newFolder);
+        });
+        archive.directory(newFolder, false);
+        archive.finalize();
+        break;
+      case 'launcher':
+        break;
+      case 'self':
+        break;
+    }
+  });
+}
+
+function importModpack(target) {
+  var importFrom = dialog.showOpenDialog({ properties: ['openFile'] });
+}
 
 //var globEvent; TODO: more sophisticated & display progress in render
 ipcMain.on('check-updates', (event, arg) => {
