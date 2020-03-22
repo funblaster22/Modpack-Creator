@@ -23,15 +23,23 @@ function play(target) {
     }
   }
 
-  exportMClauncher();
   let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
-  let data = editProjectsFile()
-  if (!fs.existsSync(versionsFolderPath + data.forgeVersion)) {  // check if allready installed
-    installForge();
-    return;
+  let data = editProjectsFile();
+  for (let forgeFolder of fs.readdirSync(versionsFolderPath)) {  // check if allready installed
+    if (!isEmpty(data.forgeVersion) && forgeFolder.includes(data.forgeVersion.split(/-(.+)/)[1])
+        && forgeFolder.includes(bestVersion) ) {
+      // eg forgeVersion = 1.14.4-28.2.3
+      editProjectsFile(function(data) {
+        data.forgeVersion = forgeFolder;
+        return data;
+      });
+      exportMClauncher();
+      child_process.execFile(localStorage.launcher);
+      console.log('Starting Launcher...');
+      return;
+    }
   }
-  child_process.execFile(localStorage.launcher);
-  console.log('Starting Launcher...');
+  installForge();
 
   async function downloadMod(modInfo, filePath) {
     for (var dependancy of modInfo.dependencies)
@@ -85,7 +93,7 @@ function play(target) {
     await newSearchRaw(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
 
     editProjectsFile(function(data) {
-      data.forgeVersion = bestVersion + '-forge' + forgeName;
+      data.forgeVersion = forgeName;
       return data;
     });
     alert("Installing MC Forge. When prompted, press ok and do not change any settings. "+
