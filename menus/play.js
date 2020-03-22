@@ -119,5 +119,10 @@ function findBestVersion() {
   }
   console.log(support);
   // TODO: convert to function
-  return Object.keys(support).reduce((a, b) => support[a] > support[b] ? a : b);  // return item in object with heighest value
+  try {
+    return Object.keys(support).reduce((a, b) => support[a] > support[b] ? a : b);  // return item in object with heighest value
+  } catch (e) {
+    alert('Add some mods before playing!');
+    location.reload();
+  }
 }
