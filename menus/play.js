@@ -11,13 +11,9 @@ function play(target) {
   fs.mkdirSync(path, { recursive: true });
 
   var downloadedMods = [];
-  for (let file of fs.readdirSync(path))
-    downloadedMods.push(negativeArrayIndex(file.split('.'), 2));
-  console.log("Downloaded Mods:", downloadedMods);
 
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
-    if (fs.existsSync(filePath)) continue; // TODO: exception if updateOnRun set
     if (mod.url == undefined)
       downloadMod(mod, filePath);
     else {
@@ -56,7 +52,16 @@ function play(target) {
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
-    newSearch(data.download.url.replace('files', 'download') + '/file', null, filePath);
+
+    var filename = pathlib.dirname(filePath) + `\\${data.download.id}.` +pathlib.basename(filePath);
+    if (fs.existsSync(filename)) return; // detect mod update
+
+    for (var modFile of fs.readdirSync(pathlib.dirname(filePath)) ) { // delete old mod
+      if (negativeArrayIndex(modFile.split('.'), 2) == modInfo.name)
+        fs.unlinkSync(pathlib.dirname(filePath) +"\\"+ modFile);
+    }
+
+    newSearch(data.download.url.replace('files', 'download') + '/file', null, filename);
     // OLD https://www.curseforge.com/minecraft/mc-mods/quark/files/2746011/file
     // NEW https://www.curseforge.com/minecraft/mc-mods/quark/download/2746011/file
   }
