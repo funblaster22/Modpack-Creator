@@ -10,6 +10,7 @@ const { dialog, app } = require('electron').remote;
 const os = require('os');
 const find = require('find');
 const { shell } = require('electron');
+const fs = require('fs');
 
 
 window.onload = function() {
@@ -35,6 +36,10 @@ function autodetect() {
       localStorage.profiles = os.homedir() + '\\.minecraft';
   }
   localStorage.profiles += '\\launcher_profiles.json';
+  if (!validateFolder(localStorage.launcher))
+    localStorage.launcher = "!Must set manually!"
+  if (!validateFolder(localStorage.profiles))
+    localStorage.profiles = "!Must set manually!"
   location.reload();
 }
 
@@ -71,6 +76,8 @@ function locate(target, filter) {  // action = weather to open folder or file
 }
 
 function validateFolder(folder) {  // TODO
+  if (fs.existsSync(folder) && (folder.includes("MinecraftLauncher.exe") || folder.includes("launcher_profiles.json")))
+    return true;
   return false;
 }
 

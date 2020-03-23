@@ -1,4 +1,6 @@
 function play(target) {
+  check();
+
   selectedModpack = $(target).parent().prev('input').val();
   var file = editProjectsFile();  //TODO: rename to modpack
   var bestVersion = (file.settings.MCversion == 'Auto') ? findBestVersion() : file.settings.MCversion;
@@ -99,6 +101,15 @@ function play(target) {
     alert("Installing MC Forge. When prompted, press ok and do not change any settings. "+
           "Afterwards, press play again (you may need to change the profile once in the launcher)");
     child_process.exec('java -jar ' + app.getPath("temp") + '\\forge-installer.jar');
+  }
+
+  function check() {
+    if (localStorage.profiles[0] == '!' || localStorage.launcher[0] == '!'
+      || isEmpty(localStorage.profiles) || isEmpty(localStorage.launcher)) {
+        alert("You must specify profile & launcher location first!");
+        location.reload();
+    }
+      //open('menus/locate.html');
   }
 
 }
