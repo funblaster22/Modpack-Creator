@@ -101,18 +101,21 @@ function calcAllVersions(startValues) {
       allVersions.push(MCversion);
     }
   }}
-  return removeDuplicateVersions(allVersions.sort((a, b) => {
-    // Sort allVersions and deal with special cases like "-Snapshot"
-    if (!compareVersions.validate(a))
-      a = a.replace(/-\w+/, ".0$&");
-    if (!compareVersions.validate(b))
-      b = b.replace(/-\w+/, ".0$&");
-    return compareVersions(a, b);
-  }) );
+  return removeDuplicateVersions(allVersions);
+}
+
+function improvedCompareVersions(a, b) {
+  // Sort allVersions and deal with special cases like "-Snapshot"
+  if (!compareVersions.validate(a))
+    a = a.replace(/-\w+/, ".0$&");
+  if (!compareVersions.validate(b))
+    b = b.replace(/-\w+/, ".0$&");
+  return compareVersions(a, b);
 }
 
 function removeDuplicateVersions(allVersions) {
   //allVersions = editProjectsFile().allVersions;
+  allVersions.sort(improvedCompareVersions);
   var versionsToDelete = [];
   for (var i=allVersions.length-1; i>0; i--) {
     if (getBaseVersion(allVersions[i]) == getBaseVersion(allVersions[i-1]) ) {
@@ -133,11 +136,12 @@ async function scanMod(self) {
     self.innerText = 'Remove';
     var data = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self)
     console.log(data);
-    //let versions = Object.keys(data.versions);
     var versions = [];
     for (let version of Object.values(data.versions)) {
       // remove non-versions like "Forge" and ensure all versions reported
-      versions.push(negativeArrayIndex( version[0].versions.filter(e => {return compareVersions.validate(e) || e.includes('Snapshot')}) ));
+      versions.push(...version[0].versions.
+        filter(e => {return compareVersions.validate(e) || e.includes('Snapshot')})
+        );
     }
     let dependencies = await findDependencies(searchCard.data.urlName);
     editProjectsFile(function(file) {
@@ -145,7 +149,7 @@ async function scanMod(self) {
       file.mods.push({
         name: searchCard.data.urlName,
         dependencies: dependencies,
-        supportedMCversions: versions
+        supportedMCversions: removeDuplicateVersions(versions)
       });
       return file;
     });

@@ -119,17 +119,17 @@ function play(target) {
 
 }
 
+/**
+determine MC version with the most supported mods
+*/
 function findBestVersion() {
-  /**
-  determine MC version with the most supported mods
-  */
   var file = editProjectsFile();
   var support = {}; // stores each MC version and how many mods support it
+  for (let item of file.allVersions)
+    support[item] = 0;
   for (var mod of file.mods) {  // iterate through each mod in modpack
-    for (var version of mod.supportedMCversions) {  //
-      if (support[version] == undefined) // if
-        support[version] = 1;
-      else
+    for (var version of mod.supportedMCversions) {
+      if (support[version] != undefined)
         support[version] += 1;
     }
   }
