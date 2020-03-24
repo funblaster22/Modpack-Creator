@@ -108,15 +108,16 @@ function initTooltips() {
   });
 }
 
+/**
+@param {HTMLElement} elem = obj that was clicked
+@param {string} name = name of tab (eg settings, add-mods, icon, etc)
+@param {function} callback = function to call when animation complete
+*/
 function openTab(elem, name, callback) {
-  /**
-  @param {HTMLElement} elem = obj that was clicked
-  @param {string} name = name of tab (eg settings, add-mods, icon, etc)
-  @param {function} callback = function to call when animation complete
-  */
   $('input').attr("disabled", '');
   window.getSelection().removeAllRanges();
   if (detailDiv) {  //if already open
+    if (detailDiv.isAnimating) return;
     if (detailDiv.className == name) closeTab();
     else {
       $('#detail *').remove();
@@ -131,6 +132,7 @@ function openTab(elem, name, callback) {
   selectedModpack = $(modpackContainer).find('input').val();
   detailDiv = document.createElement('div');
   detailDiv.id = 'detail';
+  detailDiv.isAnimating = true;
   detailDiv.className = name;
   $(detailDiv).insertAfter(modpackContainer);
 
@@ -138,12 +140,14 @@ function openTab(elem, name, callback) {
 
   $('.flex').animate({
     top: -previous * $(modpackContainer).outerHeight() // replace with height of cell
-  }, 500, callback);
+  }, 500, function() { detailDiv.isAnimating=false; callback(); });
   $('html').css('overflow-y', 'hidden');
 }
 
 function closeTab() {
   $('#detail *').hide();
+  $('input').attr("disabled", '');
+  detailDiv.isAnimating = true;
   detailDiv.style.animationName = 'detail-retract';
   $('.flex').animate({
     top: 0 // replace with height of cell
