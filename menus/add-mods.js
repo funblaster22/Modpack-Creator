@@ -43,8 +43,8 @@ async function parseSearch(event) {
     data.description = item.querySelector('p').innerText.trim();
     data.icon = item.querySelector('img').src;
     data.author = item.children[0].children[1].children[2];
-    data.urlName = data.link.split('/');
-    data.urlName = data.urlName[data.urlName.length-1];
+    data.urlName = negativeArrayIndex(data.link.split('/'));
+    data.tags = Array.from(item.querySelectorAll('figure')).map(item => item.getAttribute('title'));
     console.log(data);
 
     var container = document.getElementById('search-card').content.cloneNode(true);
@@ -52,7 +52,7 @@ async function parseSearch(event) {
       '.title': data.title,
       '.author': data.author,
       '.description': data.description,
-      '.tags': 'tags',
+      '.tags': data.tags.join('; '),
       '.add': (mods.includes(data.urlName)) ? 'Remove' : 'Add',
       'img': {src: data.icon },
       '.search': {data: data}
@@ -72,7 +72,7 @@ async function showDetails(target) {
     searchCard.querySelector('.detail').innerHTML = doc.querySelector('.project-detail__content').innerHTML;
     $('.detail a').on('click', function(event) {
       event.preventDefault();
-      shell.openExternal(event.target.href);
+      shell.openExternal(urllib.resolve("https://www.curseforge.com/minecraft/mc-mods/", event.target.getAttribute('href')) );
     });
     $('.detail img').css('maxWidth', '100%');
   }

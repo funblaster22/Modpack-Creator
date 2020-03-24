@@ -58,7 +58,7 @@ delete window.module;
           <img src='' />
           <a class=title href='#' onclick='showDetails(this)'>Title</a>
           by
-          <a href='#' class=author onclick='event.preventDefault(); console.log("https://www.curseforge.com" + $(this).attr("href"));' template='href'>funblaster22</a>
+          <a href='#' class=author onclick='event.preventDefault(); shell.openExternal("https://www.curseforge.com"+ $(this).attr("href") +"/projects");' template='href'>funblaster22</a>
           <!-- TODO: search for mods by author when clicked -->
         </div><div>
           <span class=description>description</span>
