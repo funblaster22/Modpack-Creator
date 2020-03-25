@@ -1,4 +1,4 @@
-function play(target) {
+async function play(target) {
   check();
 
   selectedModpack = $(target).parent().prev('input').val();
@@ -15,11 +15,12 @@ function play(target) {
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
     if (mod.url == undefined)
-      downloadMod(mod, filePath);
+      await downloadMod(mod, filePath);
     else {
       downloadUnknownMod(mod.url, filePath);
     }
   }
+  deleteUnusedMods();
 
   let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
   let data = editProjectsFile();
@@ -39,12 +40,19 @@ function play(target) {
   }
   installForge();
 
+  function deleteUnusedMods() {
+    console.log(downloadedMods, path);
+    for (var modFile of fs.readdirSync(path)) { // delete old mod
+      if (!downloadedMods.includes(negativeArrayIndex(modFile.split('.'), 2)) )
+        fs.unlinkSync(path +"\\"+ modFile);
+    }
+  }
+
   async function downloadMod(modInfo, filePath) {
     for (var dependancy of modInfo.dependencies)
       downloadMod({name: dependancy, dependencies: await findDependencies(dependancy)}, filePath.replace('.jar', `.${ dependancy }.jar`));
 
     if (downloadedMods.includes(modInfo.name)) return; // prevent duplicate mods
-    downloadedMods.push(modInfo.name);
 
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
@@ -54,6 +62,7 @@ function play(target) {
     }*/
 
     var filename = pathlib.dirname(filePath) + `\\${data.download.id}.` +pathlib.basename(filePath);
+    downloadedMods.push(modInfo.name);
     if (fs.existsSync(filename)) return; // detect mod update
 
     for (var modFile of fs.readdirSync(pathlib.dirname(filePath)) ) { // delete old mod
