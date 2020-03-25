@@ -11,14 +11,15 @@ async function play(target) {
   fs.mkdirSync(path, { recursive: true });
 
   var downloadedMods = [];
+  ipcRenderer.sendSync('progressbar', file.mods.length);
 
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
     if (mod.url == undefined)
       await downloadMod(mod, filePath);
-    else {
+    else
       downloadUnknownMod(mod.url, filePath);
-    }
+    ipcRenderer.sendSync('progressbar');
   }
   deleteUnusedMods();
 

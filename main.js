@@ -1,6 +1,7 @@
 const electron = require('electron');
 const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = electron;  //https://electronjs.org/docs/tutorial/first-app
 const { autoUpdater } = require("electron-updater");
+const ProgressBar = require('electron-progressbar');
 const fs = require("fs-extra");
 var archiver = require('archiver');
 
@@ -224,5 +225,27 @@ autoUpdater.on('update-not-available', (info) => {
 autoUpdater.on('error', (err) => {
   globEvent.reply('has-update', err);
 });*/
+
+var progressBar;
+ipcMain.on('progressbar', (event, arg) => {
+  if (!progressBar || progressBar.isCompleted()) {
+    progressBar = new ProgressBar({
+      text: 'Checking for updates...',
+      detail: 'Wait...',
+      indeterminate: false,
+      maxValue: arg,
+      browserWindow: {
+        parent: win,
+          webPreferences: {
+            nodeIntegration: true
+          }
+      }
+    });
+  } else {
+    progressBar.value += 1;
+    progressBar.detail = `Processed ${progressBar.value} / ${progressBar.getOptions().maxValue}`;
+  }
+  event.returnValue = progressBar.getOptions();
+});
 
 app.on('ready', createWindow);
