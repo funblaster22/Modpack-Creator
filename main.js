@@ -3,11 +3,13 @@ const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = electron;  //https:
 const { autoUpdater } = require("electron-updater");
 const ProgressBar = require('electron-progressbar');
 const fs = require("fs-extra");
-var archiver = require('archiver');
+const archiver = require('archiver');
+const PROJECTS_JSON = app.getPath('userData') + '\\projects.json';
 
 function createPopup (website) {
   // Create the popup window.
   let popup = new BrowserWindow({
+    icon: __dirname + '\\assets\\profile.jpg',
     parent: win,
     modal: true,
     resizable: false,
@@ -21,8 +23,6 @@ function createPopup (website) {
   });
 
   popup.loadFile(website);
-  if (process.defaultApp)
-    popup.openDevTools();
   //popup.removeMenu();
   popup.setMenuBarVisibility(false);
   return popup;
@@ -53,14 +53,17 @@ function createWindow () {
           click() { win.webContents.send('new-modpack'); }
         },
         {label:'Export', submenu: [
-          {label:'Twitch'},
+          {label:'Twitch', click() { exportModpack('twitch') }},
           {label:'MultiMC', click() { exportModpack('multimc') }},
-          {label:'Minecraft Launcher', click() { exportModpack('launcher')}},
           {label:'Auto Mod Updater', click() { exportModpack('self')}}
         ]},
-        {label:'Import', submenu: [{label:'Twitch'}, {label:'MultiMC'}, {label:'Minecraft Launcher'}, {label:'Auto Mod Updater'}]},
+        {label:'Import', submenu: [
+          {label:'Twitch'},
+          {label:'MultiMC'},
+          {label:'Auto Mod Updater', click() { importModpack('self')}}
+        ]},
         {role:'quit'}
-        ]
+      ]
     },
     {
       label: 'Edit',
@@ -163,8 +166,17 @@ ipcMain.on('download-to', (event, arg) => {
 });
 
 function exportModpack(target) {
-  var exportTo = dialog.showOpenDialog(win, { properties: ['openDirectory'] });
-  win.webContents.send('modpack-info', 'export');
+  ipcMain.removeAllListeners('selected');
+  ipcMain.removeAllListeners('modpack-info');
+  var popup = createPopup("menus/multiselect.html");
+  var exportTo;
+  var modpackQue;
+  ipcMain.on('selected', (event, arg) => {
+    modpackQue = arg;
+    exportTo = dialog.showOpenDialog(win, { properties: ['openDirectory'] });
+    for (let modpack of arg)
+      win.webContents.send('modpack-info', modpack);
+  });
   ipcMain.on('modpack-info', (event, arg) => {
     console.log(arg.name);
     switch (target) {
@@ -195,16 +207,25 @@ function exportModpack(target) {
         archive.directory(newFolder, false);
         archive.finalize();
         break;
-      case 'launcher':
+      case 'twitch':
         break;
       case 'self':
+        var exportProj = JSON.parse(fs.readFileSync(PROJECTS_JSON, 'utf-8'));
+        for(var key of Object.keys(exportProj))
+          if (!modpackQue.includes(key))
+            delete exportProj[key];
+        fs.writeFileSync(exportTo[0]+'\\My Minecraft Mods.json', JSON.stringify(exportProj));
         break;
     }
   });
 }
 
 function importModpack(target) {
-  var importFrom = dialog.showOpenDialog({ properties: ['openFile'] });
+  ipcMain.removeAllListeners('selected');
+  if (target == 'self') {
+    var popup = createPopup("menus/multiselect.html");
+    importFile = JSON.parse(fs.readFileSync(importFrom, 'utf-8'));
+  }
 }
 
 //var globEvent; TODO: more sophisticated & display progress in render

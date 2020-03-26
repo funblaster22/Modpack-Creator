@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../assets/profile.jpg">
+    <title>Multiselect</title>
+    <script>  // SIZE: 382 by 225
+const fs = require('fs');
+const { app } = require('electron').remote;
+const { ipcRenderer } = require('electron');
+const PROJECTS_JSON = app.getPath('userData') + '\\projects.json';
+
+window.onload = function() {
+  var allModpacks = JSON.parse(fs.readFileSync(PROJECTS_JSON, 'utf-8'));
+  console.log(allModpacks);
+  for (var modpack of Object.keys(allModpacks)) {
+    let li = document.createElement('li');
+    let input = document.createElement('input');
+    input.setAttribute('type', 'checkbox');
+    li.appendChild(input);
+    input.name = modpack;
+    li.innerHTML += modpack;
+    document.querySelector('ul').appendChild(li);
+  }
+}
+
+function changeall(target) {
+  for (var input of document.getElementsByTagName('input'))
+    input.checked = target.checked;
+}
+
+function send() {
+  var data = Array.from(
+    document.querySelectorAll('li input:checked')).map(i => i.name);
+  if (data.length > 0)
+    ipcRenderer.send('selected', data);
+  window.close();
+}
+    </script>
+    <style>
+/*html, body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}*/
+    </style>
+  </head>
+  <body>
+    <h3>Select which modpacks to export</h3>
+    <input type=checkbox onclick="changeall(this)" /> All / None
+    <ul></ul>
+    <button onclick=send()>Ok</button>
+    <button onclick=window.close()>Cancel</button>
+  </body>
+</html>
