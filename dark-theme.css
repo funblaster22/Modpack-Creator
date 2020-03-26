@@ -2,6 +2,10 @@
   color: white !important;
 }
 
+a {
+  color: lightblue !important;
+}
+
 body, html {
   background-color: #24292e;
 }
@@ -20,7 +24,7 @@ th {
 }
 
 table, td, th {
-  border: 1px solid white;
+  border: 1px solid white !important;
 }
 
 li.search {

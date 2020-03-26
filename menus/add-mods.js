@@ -67,9 +67,24 @@ async function showDetails(target) {
   var dropdown = searchCard.querySelector('.fas');
   if (dropdown.classList.contains('fa-caret-down')) {  // toggle show detail
     dropdown.className = dropdown.className.replace('fa-caret-down', 'fa-caret-up');
-    var doc = await newSearch(searchCard.data.link, searchCard.querySelector('.detail'));
+    if (!searchCard.data.more)
+      searchCard.data.more = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, searchCard.querySelector('.detail'));
 
-    searchCard.querySelector('.detail').innerHTML = doc.querySelector('.project-detail__content').innerHTML;
+    $('<div><button>X</button></div>').insertBefore(searchCard)
+      .click(function() {
+        if (searchCard.getBoundingClientRect().top < -30)
+          detailDiv.scrollBy(0, searchCard.getBoundingClientRect().top-151);
+        target.click();
+      });
+
+    searchCard.querySelector('.detail').innerHTML = searchCard.data.more.description;
+    /*var iframe = document.createElement('iframe'); TODO: sanitise imput
+    searchCard.querySelector('.detail').appendChild(iframe);
+    iframe.setAttribute('sandbox', '');
+    var doc = iframe.contentWindow.document;
+    doc.open()
+    doc.write(searchCard.data.more.description);
+    doc.close();*/
     $('.detail a').on('click', function(event) {
       event.preventDefault();
       shell.openExternal(urllib.resolve("https://www.curseforge.com/minecraft/mc-mods/", event.target.getAttribute('href')) );
@@ -77,6 +92,7 @@ async function showDetails(target) {
     $('.detail img').css('maxWidth', '100%');
   }
   else { // toggle hide detail
+    $(searchCard).prev().remove();
     dropdown.className = dropdown.className.replace('fa-caret-up', 'fa-caret-down');
     $(searchCard.querySelector('.detail')).empty();
   }
@@ -134,7 +150,9 @@ async function scanMod(self) {
   var searchCard = $(self).closest('.search')[0];
   if (self.innerText == 'Add') {
     self.innerText = 'Remove';
-    var data = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self)
+    if (!searchCard.data.more)
+      searchCard.data.more = await newSearchRaw('https://api.cfwidget.com/minecraft/mc-mods/' + searchCard.data.urlName, self);
+    var data = searchCard.data.more;
     console.log(data);
     var versions = [];
     for (let version of Object.values(data.versions)) {
