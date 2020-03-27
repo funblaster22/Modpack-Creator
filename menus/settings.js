@@ -18,6 +18,8 @@ function openSettings(event) {
   document.querySelectorAll('select').forEach(function(item) {
     var selected = projectJSON.settings[item.id];
     $(`option:contains("${ selected }")`).attr('selected', '');
+    if (!item.innerText.includes(selected))
+      changeSetting({target: item});
     item.addEventListener('change', changeSetting);
   });
 
