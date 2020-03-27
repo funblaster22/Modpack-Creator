@@ -57,7 +57,7 @@ async function play(target) {
 
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
-    if (getBaseVersion(data.download.version) != getBaseVersion(bestVersion)) return;
+    if (!data.download.versions.map(i => getBaseVersion(i)).includes(getBaseVersion(bestVersion)) ) return;
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/

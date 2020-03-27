@@ -256,7 +256,7 @@ ipcMain.on('progressbar', (event, arg) => {
       indeterminate: false,
       maxValue: arg,
       browserWindow: {
-        parent: win,
+        parent: (process.defaultApp) ? undefined : win,
           webPreferences: {
             nodeIntegration: true
           }
