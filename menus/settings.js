@@ -124,6 +124,11 @@ function changeSetting (event) {
 }
 
 function changeName(self) {  // TODO: retain order or add sort by (name, played, custom)
+  if (Object.keys(file).includes(self.value)) {
+    alert(`Modpack "${self.value}" already exists`);
+    self.value = selectedModpack;
+    return;
+  }
   file[self.value] = file[selectedModpack];
   delete file[selectedModpack];
   var prefix = app.getPath('userData') + '\\profiles\\';

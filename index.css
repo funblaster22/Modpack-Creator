@@ -152,7 +152,7 @@ input[disabled] {
   border: 1px dotted grey; margin-top: 10px; margin-bottom: 10px;
 }
 
-.search {
+li.search {
   list-style: none;
   border: 1px solid black;
   padding: 10px;

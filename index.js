@@ -65,19 +65,21 @@ function newModpack() {
   prompt({
     title: 'New Modpack',
     label: 'Name:',
-    icon: 'profile.png',
-    height: 150,
+    icon: 'assets/profile.jpg',
+    height: 180,
     inputAttrs: {
         type: 'text', required: true
     }
-  })
+  }, electron.remote.getCurrentWindow())
   .then((result) => {
+    var projects = JSON.parse(fs.readFileSync(PROJECTS_JSON));
     if (isEmpty(result)) {
       console.log('user cancelled');
+    } else if (Object.keys(projects).includes(result)) {
+      alert(`Modpack "${result}" already exists`);
+      newModpack();
     } else {
       console.log('result: ', result);
-      var data = fs.readFileSync(PROJECTS_JSON);
-      var projects = JSON.parse(data);
       projects[result] = {
         "icon": "",
         "allVersions": [],
@@ -94,8 +96,7 @@ function newModpack() {
       fs.writeFileSync(PROJECTS_JSON, JSON.stringify(projects, null, 2));
       location.reload();
     }
-  })
-  .catch(console.error);
+  });
 }
 
 function initTooltips() {
