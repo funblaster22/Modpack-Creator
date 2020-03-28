@@ -149,6 +149,10 @@ function createWindow () {
       }
     })
     item.once('done', (event, state) => {
+      win.webContents.send('delete-webview', item.getURLChain()[0]);
+      delete saveTo[item.getURLChain()[0]];
+      progressBar.value = progressBar.total - Object.keys(saveTo).length;
+      progressBar.detail = `Processed ${progressBar.value} / ${progressBar.getOptions().maxValue}`;
       if (state === 'completed') {
         console.log('Download successful')
       } else {
@@ -257,16 +261,21 @@ ipcMain.on('progressbar', (event, arg) => {
       maxValue: arg,
       browserWindow: {
         parent: (process.defaultApp) ? undefined : win,
+        icon: __dirname + '\\assets\\profile.jpg',
           webPreferences: {
             nodeIntegration: true
           }
       }
     });
+    progressBar.on('completed', function() {
+      event.reply('progressbar-done');
+    });
+    progressBar.total = 0;
   } else {
-    progressBar.value += 1;
+    progressBar.value = ++progressBar.total - Object.keys(saveTo).length;
     progressBar.detail = `Processed ${progressBar.value} / ${progressBar.getOptions().maxValue}`;
   }
-  event.returnValue = progressBar.getOptions();
+  //event.returnValue = progressBar;
 });
 
 app.on('ready', createWindow);

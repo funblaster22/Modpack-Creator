@@ -65,9 +65,9 @@ function newSearch(url, loadingLocation=undefined, downloadTo=null) {
     //var webview = document.querySelector("webview");
     var webview = document.body.appendChild(document.querySelector('webview').cloneNode());
     webview.src = url;
-    // TODO: remove unused webviews
     webview.addEventListener("ipc-message", function (e) {
       if (loadingLocation) loading.remove();
+      webview.remove();
       if (e.channel === "html-content") {
         var html_contents = e.args[0];
         resolve(new DOMParser().parseFromString(html_contents, 'text/html'));
@@ -76,6 +76,6 @@ function newSearch(url, loadingLocation=undefined, downloadTo=null) {
   });
 }
 
-$().ready(function() {
-
+ipcRenderer.on('delete-webview', function (event, text) {
+  $(`webview[src="${text}"]`).remove();
 });

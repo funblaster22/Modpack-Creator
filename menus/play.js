@@ -11,7 +11,7 @@ async function play(target) {
   fs.mkdirSync(path, { recursive: true });
 
   var downloadedMods = [];
-  ipcRenderer.sendSync('progressbar', file.mods.length);
+  ipcRenderer.send('progressbar', file.mods.length);
 
   for (var mod of file.mods) {
     var filePath = path + '\\' + mod.name + '.jar';
@@ -19,14 +19,17 @@ async function play(target) {
       await downloadMod(mod, filePath);
     else
       downloadUnknownMod(mod.url, filePath);
-    ipcRenderer.sendSync('progressbar');
+    ipcRenderer.send('progressbar');
   }
   deleteUnusedMods();
 
-  if (needsForgeUpdate())
-    await installForge();
-  child_process.execFile(localStorage.launcher);
-  console.log('Starting Launcher...');
+  ipcRenderer.removeAllListeners('progressbar-done');
+  ipcRenderer.once('progressbar-done', async (event, arg) => {
+    if (needsForgeUpdate())
+      await installForge();
+    child_process.execFile(localStorage.launcher);
+    console.log('Starting Launcher...');
+  });
 
   function needsForgeUpdate() {
     let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
