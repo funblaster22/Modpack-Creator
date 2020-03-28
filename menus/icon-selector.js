@@ -1,7 +1,4 @@
 function choosePic(event) {
-  //openTab(event.target);  TODO:  wait to show until animation done
-  detailDiv.className = "icon-selector";
-
   fs.readdirSync(__dirname + '\\assets\\icons').forEach(file => {
     console.log(file);
     var img = document.createElement('img');
@@ -16,11 +13,11 @@ function choosePic(event) {
 }
 
 function changeIcon(icon) {
-  var data = fs.readFileSync(PROJECTS_JSON);
-  var projects = JSON.parse(data);
-  projects[selectedModpack].icon = icon.getAttribute("src");
-  fs.writeFileSync(PROJECTS_JSON, JSON.stringify(projects, null, 2));
-  modpackContainer.querySelector('img').src = icon.getAttribute("src");
+  editProjectsFile(function(data) {
+    data.icon = icon.getAttribute("src");
+    modpackContainer.querySelector('img').src = icon.getAttribute("src");
+    return data;
+  });
   closeTab();
 }
 
@@ -31,8 +28,16 @@ function uploadImg() {
       { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
     ]
   }, function (files) {
-      if (files !== undefined) {
-          // handle files
-      }
+      if (files !== undefined)
+        changeIcon($(`<img src=${files[0]} />`)[0]);
   });
+}
+
+function base64_encode(file) {
+    // read binary data
+    if (!fs.existsSync(file)) file = "assets\\creeper.jpg";
+    var bitmap = fs.readFileSync(file);
+    var ext = pathlib.extname(file).replace('.', '');
+    // convert binary data to base64 encoded string
+    return `data:image/${ext};base64,` + bitmap.toString('base64');
 }
