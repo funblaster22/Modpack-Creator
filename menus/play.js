@@ -23,23 +23,28 @@ async function play(target) {
   }
   deleteUnusedMods();
 
-  let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
-  let data = editProjectsFile();
-  for (let forgeFolder of fs.readdirSync(versionsFolderPath)) {  // check if allready installed
-    if (!isEmpty(data.forgeVersion) && forgeFolder.includes(data.forgeVersion.split(/-(.+)/)[1])
-        && forgeFolder.includes(bestVersion) ) {
-      // eg forgeVersion = 1.14.4-28.2.3
-      editProjectsFile(function(data) {
-        data.forgeVersion = forgeFolder;
-        return data;
-      });
-      exportMClauncher();
-      child_process.execFile(localStorage.launcher);
-      console.log('Starting Launcher...');
-      return;
+  if (needsForgeUpdate())
+    await installForge();
+  child_process.execFile(localStorage.launcher);
+  console.log('Starting Launcher...');
+
+  function needsForgeUpdate() {
+    let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
+    let data = editProjectsFile();
+    for (let forgeFolder of fs.readdirSync(versionsFolderPath)) {  // check if allready installed
+      if (!isEmpty(data.forgeVersion) && forgeFolder.includes(data.forgeVersion.split(/-(.+)/)[1])
+          && forgeFolder.includes(bestVersion) ) {
+        // eg forgeVersion = 1.14.4-28.2.3
+        editProjectsFile(function(data) {
+          data.forgeVersion = forgeFolder;
+          return data;
+        });
+        exportMClauncher();
+        return false;
+      }
     }
+    return true;
   }
-  installForge();
 
   function deleteUnusedMods() {
     console.log(downloadedMods, path);
@@ -107,15 +112,28 @@ async function play(target) {
     //let file = await newSearchRaw(installer.href);
     console.log(forgeName);
 
-    await newSearchRaw(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
-
     editProjectsFile(function(data) {
       data.forgeVersion = forgeName;
       return data;
     });
+    if (!needsForgeUpdate()) return;
+
+    await newSearchRaw(installer.href, null, app.getPath("temp") + '\\forge-installer.jar');
+
     alert("Installing MC Forge. When prompted, press ok and do not change any settings. "+
           "Afterwards, press play again (you may need to change the profile once in the launcher)");
-    child_process.exec('java -jar ' + app.getPath("temp") + '\\forge-installer.jar');
+    var child = child_process.exec('java -jar ' + app.getPath("temp") + '\\forge-installer.jar');
+    return new Promise((res, rej) => {
+      child.on('close', async (code) => {
+        if (needsForgeUpdate()) {
+          if (dialog.showMessageBox(electron.remote.getCurrentWindow(), {type:"warning", buttons:['retry', 'cancel'], message: "You didn't install forge!"}) == 0)
+            await installForge();
+          else
+            rej('user cancelled');
+        }
+        res(`child process exited with code ${code}`);
+      });
+    });
   }
 
   function check() {
