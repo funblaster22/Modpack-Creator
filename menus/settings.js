@@ -146,7 +146,9 @@ function confirmDelete() {
     defaultId: 1 //doesn't work
   });
   if (result == 0) {
-    console.log('deleted');
+    console.log('deleted', app.getPath('userData') +'\\profiles\\'+ selectedModpack);
+    fs.removeSync(app.getPath('userData') +'\\profiles\\'+ selectedModpack);
+    removeProfile(selectedModpack);
     delete file[selectedModpack];
     fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
     closeTab();

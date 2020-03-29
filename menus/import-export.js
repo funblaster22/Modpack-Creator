@@ -18,3 +18,10 @@ function exportMClauncher() {
   let newProfile = JSON.stringify(profile, null, 2);
   fs.writeFileSync(localStorage.profiles, newProfile);
 }
+
+function removeProfile(modpackName) {
+  let profile = JSON.parse(fs.readFileSync(localStorage.profiles));
+  delete profile.profiles[modpackName];
+  console.log(profile);
+  fs.writeFileSync(localStorage.profiles ,JSON.stringify(profile));
+}
