@@ -79,3 +79,8 @@ function newSearch(url, loadingLocation=undefined, downloadTo=null) {
 ipcRenderer.on('delete-webview', function (event, text) {
   $(`webview[src="${text}"]`).remove();
 });
+
+ipcRenderer.on('localStorage', function (event, text) {
+  console.log(localStorage[text]);
+  ipcRenderer.send('localStorage', localStorage[text]);
+});

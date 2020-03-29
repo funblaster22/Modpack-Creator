@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = electron;  //https://electronjs.org/docs/tutorial/first-app
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog, session } = electron;
 const { autoUpdater } = require("electron-updater");
 const ProgressBar = require('electron-progressbar');
 const fs = require("fs-extra");
@@ -71,8 +71,17 @@ function createWindow () {
         { label: 'MC Location',
           click() { createPopup('menus/locate.html'); }
         },
-        { label: 'Update All',
-          click() {}
+        { label: 'Update',
+          submenu: [
+            { label: 'Update All',
+              click() {}
+            },
+            { label: 'Update on run',
+              type: "checkbox",
+              id: "updateFreq",
+              click(self) { localStorage('alwaysUpdate', self.checked) }
+            }
+          ]
         }
       ]
     },
@@ -123,6 +132,11 @@ function createWindow () {
 
   win.once('ready-to-show', () => {
     win.show();
+  });
+
+  win.webContents.on('did-finish-load', async function() {
+    menu.getMenuItemById("updateFreq").checked =
+      await localStorage('alwaysUpdate') != 'false';
   });
 
   win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
@@ -277,5 +291,16 @@ ipcMain.on('progressbar', (event, arg) => {
   }
   //event.returnValue = progressBar;
 });
+
+function localStorage(key, val=null) {
+  if (val != null)
+    win.webContents.executeJavaScript(`localStorage.${key}=${val};`)
+  else {
+    win.webContents.send('localStorage', key);
+    return new Promise(function(resolve, reject) {
+      ipcMain.once('localStorage', (event, arg) => { resolve(arg) });
+    });
+  }
+}
 
 app.on('ready', createWindow);

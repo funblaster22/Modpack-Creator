@@ -10,18 +10,24 @@ async function play(target) {
   console.log(path);
   fs.mkdirSync(path, { recursive: true });
 
-  var downloadedMods = [];
-  ipcRenderer.send('progressbar', file.mods.length);
+  if (file.settings.lastUsedMCVersion != bestVersion || localStorage.alwaysUpdate != 'false') {
+    var downloadedMods = [];
+    ipcRenderer.send('progressbar', file.mods.length);
 
-  for (var mod of file.mods) {
-    var filePath = path + '\\' + mod.name + '.jar';
-    if (mod.url == undefined)
-      await downloadMod(mod, filePath);
-    else
-      downloadUnknownMod(mod.url, filePath);
-    ipcRenderer.send('progressbar');
+    for (var mod of file.mods) {
+      var filePath = path + '\\' + mod.name + '.jar';
+      if (mod.url == undefined)
+        await downloadMod(mod, filePath);
+      else
+        downloadUnknownMod(mod.url, filePath);
+      ipcRenderer.send('progressbar');
+    }
+    deleteUnusedMods();
+    editProjectsFile(function(data) {
+      data.settings.lastUsedMCVersion = bestVersion;
+      return data;
+    });
   }
-  deleteUnusedMods();
 
   ipcRenderer.removeAllListeners('progressbar-done');
   ipcRenderer.once('progressbar-done', async (event, arg) => {
