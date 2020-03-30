@@ -109,9 +109,9 @@ async function findDependencies(modName) {
   return dependencies;
 }
 
-function calcAllVersions(startValues) {
+function calcAllVersions(startValues=[]) {
   let mods = editProjectsFile().mods;
-  let allVersions = [...startValues] || [];
+  let allVersions = [...startValues];
   for (var mod of mods) { for (var MCversion of mod.supportedMCversions) {
     if (!allVersions.includes(MCversion)) {
       allVersions.push(MCversion);
@@ -130,7 +130,10 @@ function improvedCompareVersions(a, b) {
 }
 
 function removeDuplicateVersions(allVersions) {
-  //allVersions = editProjectsFile().allVersions;
+  // remove non-versions like "Forge"
+  allVersions = allVersions
+    .filter(e => {return compareVersions.validate(e) || e.includes('Snapshot')});
+
   allVersions.sort(improvedCompareVersions);
   var versionsToDelete = [];
   for (var i=allVersions.length-1; i>0; i--) {
@@ -156,10 +159,8 @@ async function scanMod(self) {
     console.log(data);
     var versions = [];
     for (let version of Object.values(data.versions)) {
-      // remove non-versions like "Forge" and ensure all versions reported
-      versions.push(...version[0].versions.
-        filter(e => {return compareVersions.validate(e) || e.includes('Snapshot')})
-        );
+      // ensure all versions reported
+      versions.push(...version[0].versions);
     }
     let dependencies = await findDependencies(searchCard.data.urlName);
     editProjectsFile(function(file) {
