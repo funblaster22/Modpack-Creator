@@ -54,20 +54,20 @@ async function play(target) {
     console.log(downloadedMods, path);
     for (var modFile of fs.readdirSync(path)) { // delete old mod
       if (!downloadedMods.includes(negativeArrayIndex(modFile.split('.'), 2)) )
-        fs.unlinkSync(path +"\\"+ modFile);
+        fs.removeSync(path +"\\"+ modFile);
     }
   }
 
   async function downloadMod(modInfo, filePath) {
     for (var dependancy of modInfo.dependencies)
-      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy)}, filePath.replace('.jar', `.${ dependancy }.jar`));
+      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy), required: true}, filePath.replace('.jar', `.${ dependancy }.jar`));
 
     if (downloadedMods.includes(modInfo.name)) return; // prevent duplicate mods
 
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
     console.log(modIndex)
-    editProjectsFile(file => {
+    editProjectsFile(file => { // update cached compatibility info
       if (file.mods[modIndex].name != modInfo.name) return;
 
       var versions = [];
@@ -79,7 +79,7 @@ async function play(target) {
       file.allVersions = calcAllVersions(versions);
       return file;
     });
-    if (!data.download.versions.map(i => getBaseVersion(i)).includes(getBaseVersion(bestVersion)) ) return;
+    if (!data.download.versions.includes(bestVersion) && !modInfo.required) return;
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/

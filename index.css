@@ -82,6 +82,7 @@ th {
 }
 
 #detail {
+  position: relative;
   width: 100%;
   animation-name: detail-expand;
   animation-duration: 500ms;
@@ -138,6 +139,10 @@ input[disabled] {
 
 
 /*** Styles for Add Mods ***/
+button img {
+  width: 2em;
+}
+
 #detail.add-mods > input {
   width: 90%;
 }
