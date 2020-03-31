@@ -15,8 +15,9 @@ Features:
 
 ## How to Install
 1. Click on the [releases](https://github.com/funblaster22/Modpack-Creator/releases) tab
-2. Choose your OS
-3. Run installer
+2. Scroll down to the "assets" section
+3. Download [.exe](https://github.com/funblaster22/Modpack-Creator/releases/download/v1.0.0/Auto-Mod-Updater-Setup-1.0.0.exe)
+4. Run installer
 
 ## Contributing
 1. Prerequisites: have [node.js](https://nodejs.org/en/) and [git](https://git-scm.com/downloads) installed
