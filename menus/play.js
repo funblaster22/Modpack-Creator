@@ -64,7 +64,6 @@ async function play(target) {
 
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
-    console.log(modInfo.index);
 
     if (modInfo.index)
       editProjectsFile(file => { // update cached compatibility info
@@ -83,7 +82,7 @@ async function play(target) {
     }*/
 
     for (var dependancy of modInfo.dependencies)
-      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy), required: true}, filePath.replace('.jar', `.${ dependancy }.jar`));
+      await downloadMod({name: dependancy, dependencies: await findDependencies(dependancy), required: true}, filePath.replace('.jar', `.${ dependancy }.jar`));
 
     var filename = pathlib.dirname(filePath) + `\\${data.download.id}.` +pathlib.basename(filePath);
     downloadedMods.push(modInfo.name);

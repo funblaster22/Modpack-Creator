@@ -33,9 +33,9 @@ function uploadImg() {
   });
 }
 
-function base64_encode(file) {
-    // read binary data
-    if (!fs.existsSync(file)) file = "assets\\creeper.jpg";
+function base64_encode(imgFile) {
+    file = pathlib.resolve(__dirname, imgFile);
+    if (isEmpty(imgFile) || !fs.existsSync(file)) file = __dirname + "\\assets\\creeper.jpg";
     var bitmap = fs.readFileSync(file);
     var ext = pathlib.extname(file).replace('.', '');
     // convert binary data to base64 encoded string
