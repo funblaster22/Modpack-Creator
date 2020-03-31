@@ -15,6 +15,7 @@ async function play(target) {
 
   for (var modIndex=0; modIndex<file.mods.length; modIndex++) {
     let mod = file.mods[modIndex];
+    mod.index = modIndex;
     var filePath = path + '\\' + mod.name + '.jar';
     if (mod.url == undefined)
       await downloadMod(mod, filePath);
@@ -59,30 +60,30 @@ async function play(target) {
   }
 
   async function downloadMod(modInfo, filePath) {
-    for (var dependancy of modInfo.dependencies)
-      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy), required: true}, filePath.replace('.jar', `.${ dependancy }.jar`));
-
     if (downloadedMods.includes(modInfo.name)) return; // prevent duplicate mods
 
     /* check for compatible mod versions then download */
     let data = await newSearchRaw("https://api.cfwidget.com/minecraft/mc-mods/" + modInfo.name + '?version=' + bestVersion); // +'/beta'
-    console.log(modIndex)
-    editProjectsFile(file => { // update cached compatibility info
-      if (file.mods[modIndex].name != modInfo.name) return;
+    console.log(modInfo.index);
 
-      var versions = [];
-      for (let version of Object.values(data.versions)) {
-        // ensure all versions reported
-        versions.push(...version[0].versions);
-      }
-      file.mods[modIndex].supportedMCversions = removeDuplicateVersions(versions);
-      file.allVersions = calcAllVersions(versions);
-      return file;
-    });
+    if (modInfo.index)
+      editProjectsFile(file => { // update cached compatibility info
+        var versions = [];
+        for (let version of Object.values(data.versions)) {
+          // ensure all versions reported
+          versions.push(...version[0].versions);
+        }
+        file.mods[modInfo.index].supportedMCversions = removeDuplicateVersions(versions);
+        file.allVersions = calcAllVersions(versions);
+        return file;
+      });
     if (!data.download.versions.includes(bestVersion) && !modInfo.required) return;
     /*for (var file of data.files) {
       // TODO: check release/beta/alpha + MC version
     }*/
+
+    for (var dependancy of modInfo.dependencies)
+      downloadMod({name: dependancy, dependencies: await findDependencies(dependancy), required: true}, filePath.replace('.jar', `.${ dependancy }.jar`));
 
     var filename = pathlib.dirname(filePath) + `\\${data.download.id}.` +pathlib.basename(filePath);
     downloadedMods.push(modInfo.name);
