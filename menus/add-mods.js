@@ -6,8 +6,11 @@ function editProjectsFile(editFunc) {  // TODO: rename to projectsFile
   }
   data[selectedModpack] = editFunc(modInfo);
   console.log(data);
-  if (data[selectedModpack] != null)
-    fs.writeFileSync(PROJECTS_JSON, JSON.stringify(data, null, 2))
+  if (data[selectedModpack] != null) {
+    fs.writeFileSync(PROJECTS_JSON, JSON.stringify(data, null, 2));
+    projectJSON = data[selectedModpack];
+    file = data;
+  }
 }
 
 function addMods() {
@@ -185,6 +188,7 @@ async function scanMod(self) {
       file.mods.splice(index, 1);
       return file;
     });
+    editProjectsFile(file => {file.allVersions = calcAllVersions(); return file; });
   }
 }
 
@@ -193,7 +197,7 @@ async function addUnknownMod(modUrl) {
     let website = await newSearch(modUrl);
     let websiteText = website.body.innerText;
     var versions = [];
-    for (var match of websiteText.matchAll(/(Minecraft|MC) ([0-9]+\.[0-9]+)/gim)) {
+    for (var match of websiteText.matchAll(/(Minecraft|MC) ([0-9]+\.[0-9]+(?:\.[0-9]+)?)/gim)) {
       if (!versions.includes(match[2]))
         versions.push(match[2]);  // strip so only version number remains
     }
@@ -207,7 +211,7 @@ async function addUnknownMod(modUrl) {
     title: 'New Mod',
     label: 'Mod Name:',
     icon: 'profile.png',
-    height: 150,
+    height: 180,
     inputAttrs: {
       type: 'text', required: true
     }
@@ -220,7 +224,7 @@ async function addUnknownMod(modUrl) {
 	  name: shortName.toLowerCase(),
       url: modUrl,
       dependencies: [],
-      supportedMCversions: versions
+      supportedMCversions: removeDuplicateVersions(versions)
     });
     return file;
   });

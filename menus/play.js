@@ -13,6 +13,18 @@ async function play(target) {
   var downloadedMods = [];
   ipcRenderer.send('progressbar', file.mods.length);
 
+  ipcRenderer.removeAllListeners('progressbar-done');
+  ipcRenderer.once('progressbar-done', async (event, timeout) => {
+    if (timeout === true) {
+      alert("Request timed out. Check your internet connection and try again");
+      throw new Error("Request timed out");
+    }
+    if (needsForgeUpdate())
+      await installForge();
+    child_process.execFile(localStorage.launcher);
+    console.log('Starting Launcher...');
+  });
+
   for (var modIndex=0; modIndex<file.mods.length; modIndex++) {
     let mod = file.mods[modIndex];
     mod.index = modIndex;
@@ -20,18 +32,10 @@ async function play(target) {
     if (mod.url == undefined)
       await downloadMod(mod, filePath);
     else
-      downloadUnknownMod(mod.url, filePath);
+      await downloadUnknownMod(mod, filePath);
     ipcRenderer.send('progressbar');
   }
   deleteUnusedMods();
-
-  ipcRenderer.removeAllListeners('progressbar-done');
-  ipcRenderer.once('progressbar-done', async (event, arg) => {
-    if (needsForgeUpdate())
-      await installForge();
-    child_process.execFile(localStorage.launcher);
-    console.log('Starting Launcher...');
-  });
 
   function needsForgeUpdate() {
     let versionsFolderPath = pathlib.dirname(localStorage.profiles) + '\\versions\\';
@@ -98,17 +102,19 @@ async function play(target) {
     // NEW https://www.curseforge.com/minecraft/mc-mods/quark/download/2746011/file
   }
 
-  async function downloadUnknownMod(url, savePath) {
+  async function downloadUnknownMod(mod, savePath) {
+    let url = mod.url;
     let res = await newSearchRaw(url);
-    const baseUrl = new URL(url).origin;
+    const baseUrl = new URL(url).hostname;
     console.log("Current site: " + url);
     if (res instanceof Document) {
       for (var link of res.querySelectorAll('a[href]')) {
         let label = link.innerText;
         let href = urllib.resolve(url, $(link).attr('href'));
         console.log(href);
-        if ((href.includes(bestVersion) || label.includes(bestVersion)) && href.includes(baseUrl)) { // TODO: determine if beta/alpha
-          return newSearch(href, null, savePath);
+        if ((href.includes(bestVersion) || label.includes(bestVersion)) && new URL(href).hostname == baseUrl) { // TODO: determine if beta/alpha
+          if (mod.name) downloadedMods.push(mod.name);
+          return downloadUnknownMod({url: href}, savePath); // TODO: store compatible MC version in filename
         }
       }
       alert('Unable to find download link, must finish manually!');
@@ -122,6 +128,10 @@ async function play(target) {
     let html = await newSearch(`https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_${ bestVersion }.html`);
     let installer = html.querySelector('.download a[title=Installer]');  // TODO: change reccomended/latest depending on preferences
     // alt:  .info-link.tooltipstered[href]
+    if (installer == null) {
+      alert(`Forge does not work with MC ${bestVersion}, choose a differnet version`);
+      throw new Error("Incompatible");
+    }
     installer.href = negativeArrayIndex(installer.href.split('='));
     let forgeName = negativeArrayIndex(installer.href.split('/'));
     forgeName = forgeName.replace("forge-", "");

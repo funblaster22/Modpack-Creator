@@ -138,7 +138,7 @@ function openTab(elem, name, callback) {
   let previous = $(modpackContainer).prevAll().length;  // number of previous siblings (for animation)
 
   $('.flex').animate({
-    top: -previous * $(modpackContainer).outerHeight() // replace with height of cell
+    top: -previous * $(modpackContainer).outerHeight() + document.documentElement.scrollTop // replace with height of cell
   }, 500, function() { detailDiv.isAnimating=false; callback(); });
   $('html').css('overflow-y', 'hidden');
 }

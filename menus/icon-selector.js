@@ -34,7 +34,7 @@ function uploadImg() {
 }
 
 function base64_encode(imgFile) {
-    file = pathlib.resolve(__dirname, imgFile);
+    var file = pathlib.resolve(__dirname, imgFile);
     if (isEmpty(imgFile) || !fs.existsSync(file)) file = __dirname + "\\assets\\creeper.jpg";
     var bitmap = fs.readFileSync(file);
     var ext = pathlib.extname(file).replace('.', '');

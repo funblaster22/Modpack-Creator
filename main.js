@@ -49,7 +49,8 @@ function createWindow () {
     {
       label: 'File',  //(process.platform === 'darwin') ? app.getName() : 'File'
       submenu: [
-        { label:'&New Modpack',
+        { label:'New Modpack',
+          accelerator: process.platform === 'darwin' ? 'Command+N' : 'Ctrl+N',
           click() { win.webContents.send('new-modpack'); }
         },
         {label:'Export', submenu: [
@@ -268,13 +269,20 @@ ipcMain.on('progressbar', (event, arg) => {
       }
     });
     progressBar.on('completed', function() {
-      event.reply('progressbar-done');
+      event.reply('progressbar-done', progressBar.timeout);
+      clearTimeout(progressBar.timeout);
     });
     progressBar.total = 0;
   } else {
     progressBar.value = ++progressBar.total - Object.keys(saveTo).length;
     progressBar.detail = `Processed ${progressBar.value} / ${progressBar.getOptions().maxValue}`;
   }
+  clearTimeout(progressBar.timeout);
+  progressBar.timeout = setTimeout(() => {
+    console.log("Request timed out");
+    progressBar.timeout = true;
+    progressBar.setCompleted();
+  }, 30000); // 30 sec
   //event.returnValue = progressBar;
 });
 

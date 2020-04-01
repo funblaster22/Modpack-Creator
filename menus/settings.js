@@ -40,7 +40,7 @@ function openSettings(event) {
     card.innerText = mod.name + '    ';
     card.className = 'search';
     card.data = {urlName: mod.name}  // TODO for compatibility with scanMod()
-    $('<button onclick="scanMod(this)">Remove</button>').appendTo(card);
+    $('<button onclick="scanMod(this); var restoreScroll = detailDiv.scrollTop; $(detailDiv).empty(); openSettings(); detailDiv.scrollTo(0, restoreScroll)">Remove</button>').appendTo(card);
 
     row.appendChild(card);
     document.getElementById('installed-mods').appendChild(row);

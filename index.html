@@ -43,7 +43,7 @@ delete window.module;
     <template id=cell>
       <div>
         <img src="meow.png" onerror="this.src = 'assets/missing.jpg';" title='Click to change' onclick="openTab(event.target, 'icon-selector', choosePic)" width=80 height=80 />
-        <input value='Name' disabled style='font-size: inherit; flex-grow: 99;' onchange='changeName(this)' />
+        <input value='Name' disabled style='font-size: inherit; width: 100%;' onchange='changeName(this)' />
         <div class=button-container>
           <button class="rounded-button fas fa-cog" onclick="openTab(event.target, 'settings', openSettings)"></button>
           <button class="rounded-button fas fa-plus" onclick="openTab(event.target, 'add-mods', addMods)"></button>
