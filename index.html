@@ -15,6 +15,7 @@ const child_process = require('child_process');
 const compareVersions = require("compare-versions");
 const pathlib = require('path');
 const urllib = require('url');
+const glob = require('glob');
 delete window.require;
 delete window.exports;
 delete window.module;
@@ -33,6 +34,7 @@ delete window.module;
     <script src="menus/settings.js" type="text/javascript"></script>
     <script src="menus/play.js" type="text/javascript"></script>
     <script src="menus/import-export.js" type="text/javascript"></script>
+    <script src="menus/browse-info.js" type="text/javascript"></script>
     <script src="index.js" type="text/javascript"></script>
     <link rel = "stylesheet" type="text/css" href="index.css" />
     <link rel="icon" type="image/jpeg" href="assets/profile.jpg">
@@ -47,6 +49,7 @@ delete window.module;
         <div class=button-container>
           <button class="rounded-button fas fa-cog" onclick="openTab(event.target, 'settings', openSettings)"></button>
           <button class="rounded-button fas fa-plus" onclick="openTab(event.target, 'add-mods', addMods)"></button>
+          <button class="rounded-button fas fa-globe-americas" onclick="openTab(event.target, 'browse', browseInfo)"></button>
           <button class="rounded-button fas fa-play" onclick="play(this)"></button>
         </div>
       </div>
@@ -122,6 +125,11 @@ delete window.module;
         <button class=danger onclick='confirmDelete()'>DELETE</button>
       </div>
     </template>
+    <template id=browse><div>
+      <span class=header></span>
+      <button>Open Folder</button>
+      <div class=preview></div>
+    </div></template>
     <div class=flex></div>
     <webview style="display:none" preload="preload.js"></webview>
   </body>

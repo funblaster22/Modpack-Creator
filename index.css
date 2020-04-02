@@ -60,7 +60,18 @@ th {
 
 .button-container {
   text-align: right;
-  min-width: 105px;
+}
+
+@media (min-width: 450px) {
+  .button-container {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 450px) {
+  .button-container {
+    min-width: 68px;
+  }
 }
 
 .flex > div {
@@ -164,4 +175,23 @@ li.search {
   padding: 10px;
   margin-bottom: 10px;
   margin-left: 40px;
+}
+
+
+/*** Styles for Add Mods ***/
+.preview {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.preview div {
+  height: 300px;
+  display: inline-block;
+}
+
+.preview img {
+  display: block;
+  height: 86%;
+  cursor: auto;
 }
