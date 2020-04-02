@@ -155,3 +155,16 @@ function confirmDelete() {
     modpackContainer.remove();
   }
 }
+
+function duplicate() {
+  editProjectsFile();
+  var newName = basename = "Copy of " + selectedModpack;
+  var counter = 2;
+  for (var counter=2; Object.keys(file).includes(newName); counter++)
+    // prevent duplicate names
+    newName = `${basename} (${counter})`;
+  file[newName] = projectJSON;
+  console.log("newFile", file);
+  fs.writeFileSync(PROJECTS_JSON, JSON.stringify(file, null, 2));
+  location.reload();
+}

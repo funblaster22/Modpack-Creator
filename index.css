@@ -127,8 +127,16 @@ th {
 /*** Styles for Settings ***/
 .danger {
   background-color: red;
-  color: pink;
+  color: white;
   border: 2px solid darkred !important;
+  font-variant: small-caps;
+  font-weight: bold;
+}
+
+.warn {
+  background-color: goldenrod;
+  color: white;
+  border: 2px solid darkgoldenrod !important;
   font-variant: small-caps;
   font-weight: bold;
 }
