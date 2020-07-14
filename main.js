@@ -126,13 +126,13 @@ function createWindow () {
     win.show();
   });
 
-  win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+  /*win.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
     // open window as modal
     //if (frameName === 'modal')
     event.preventDefault();
     url = url.split('/');
     event.newGuest = createPopup(url[url.length-1]);
-  });
+  });*/
 
   win.webContents.session.on('will-download', (event, item, webContents) => {
     // Set the save path, making Electron not to prompt a save dialog.
