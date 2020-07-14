@@ -1,12 +1,20 @@
 * {
   color: white !important;
+  scrollbar-color: rgb(69,74,77) rgb(32,35,36);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(69,74,77);
+}
+::-webkit-scrollbar {
+    background-color: rgb(32,35,36);
 }
 
 a {
   color: lightblue !important;
 }
 
-body, html {
+body {
   background-color: #24292e;
 }
 

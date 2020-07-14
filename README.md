@@ -1,25 +1,30 @@
 # Modpack Creator
 Allows users to easily add and update mods without having to worry about different MC versions.
+This is primarily for people who want to play modded Minecraft, but want to edit an existing modpack or create their own.
 
 Features:
- - Never worry about incompatible Minecraft versions again!
+ - Finds the best MC version that is most compatible with your mods
  - Automatically installs [Forge](https://files.minecraftforge.net/) & updates mods
  - Simple, intuitive interface + manage settings
  - Store multiple profiles
  - Search [Curseforge](https://www.curseforge.com/minecraft/mc-mods) (or add from external sites)
 
 ## Screenshots
-![main screen](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/home.png)
-![settings](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/settings.png)
-![add mods](https://github.com/funblaster22/Modpack-Creator/blob/Main/.github/add-mods.png)
+![main screen](.github/home.png)
+![settings](.github/settings.png)
+![add mods](.github/add-mods.png)
+![screenshot viewer](.github/screnshot-viewer.png)
 
 ## How to Install
-1. Click on the [releases](https://github.com/funblaster22/Modpack-Creator/releases) tab
-2. Scroll down to the "assets" section
-3. Download [.exe](https://github.com/funblaster22/Modpack-Creator/releases/download/v1.0.0/Auto-Mod-Updater-Setup-1.0.0.exe)
-4. Run installer
+1. Go to [the latest release](https://github.com/funblaster22/Modpack-Creator/releases/latest)
+2. Download “`auto-mod-updater-setup-1.x.x.exe`“ (NOT .blockmap)
+3. Run installer
+4. Note: Windows SmartScreen & Chrome may warn you that the file is unsafe, so
+   click more options, then "download/run anyway". I promise there are no
+   viruses; this will show up until it gets enough "reputation" and because
+   code signing is expensive :/
 
 ## Contributing
 1. Prerequisites: have [node.js](https://nodejs.org/en/) and [git](https://git-scm.com/downloads) installed
-2. Run "git clone https://github.com/funblaster22/Modpack-Creator.git" OR [download zip](https://github.com/funblaster22/Modpack-Creator/archive/Main.zip)
-3. Run "npm install" in the same directory as this project
+2. Run "`git clone https://github.com/funblaster22/Modpack-Creator.git`" OR [download zip](https://github.com/funblaster22/Modpack-Creator/archive/Main.zip)
+3. Run "`npm install`" in the same directory as this project

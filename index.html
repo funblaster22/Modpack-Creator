@@ -47,10 +47,10 @@ delete window.module;
         <img src="meow.png" onerror="this.src = 'assets/missing.jpg';" title='Click to change' onclick="openTab(event.target, 'icon-selector', choosePic)" width=80 height=80 />
         <input value='Name' disabled style='font-size: inherit; width: 100%;' onchange='changeName(this)' />
         <div class=button-container>
-          <button class="rounded-button fas fa-cog" onclick="openTab(event.target, 'settings', openSettings)"></button>
-          <button class="rounded-button fas fa-plus" onclick="openTab(event.target, 'add-mods', addMods)"></button>
-          <button class="rounded-button fas fa-globe-americas" onclick="openTab(event.target, 'browse', browseInfo)"></button>
-          <button class="rounded-button fas fa-play" onclick="play(this)"></button>
+          <button class="rounded-button fas fa-cog" onclick="openTab(event.target, 'settings', openSettings)" title="Settings"></button>
+          <button class="rounded-button fas fa-plus" onclick="openTab(event.target, 'add-mods', addMods)" title="Add Mods"></button>
+          <button class="rounded-button fas fa-globe-americas" onclick="openTab(event.target, 'browse', browseInfo)" title="Screenshots, Worlds, & Resource Packs"></button>
+          <button class="rounded-button fas fa-play" onclick="play(this)" title="Play!"></button>
         </div>
       </div>
     </template>
