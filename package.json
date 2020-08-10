@@ -1,6 +1,6 @@
 {
   "name": "Auto-Mod-Updater",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Easily add and update mods",
   "main": "main.js",
   "scripts": {
@@ -11,18 +11,22 @@
   },
   "author": "Ed",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/funblaster22/Modpack-Creator.git"
+  },
   "devDependencies": {
-    "electron": "^7.2.4",
-    "electron-builder": "^21.2.0"
+    "electron": "^7.3.2",
+    "electron-builder": "^22.8.1"
   },
   "dependencies": {
-    "archiver": "^3.1.1",
+    "archiver": "^5.0.0",
     "compare-versions": "^3.6.0",
     "electron-progressbar": "^1.2.0",
-    "electron-prompt": "^1.5.1",
-    "electron-updater": "^4.2.5",
+    "electron-prompt": "^1.6.0",
+    "electron-updater": "^4.3.4",
     "find": "^0.3.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^9.0.1",
     "request": "^2.88.2"
   },
   "build": {
