@@ -25,6 +25,9 @@ Features:
    code signing is expensive :/
 
 ## Contributing
-1. Prerequisites: have [node.js](https://nodejs.org/en/) and [git](https://git-scm.com/downloads) installed
-2. Run "`git clone https://github.com/funblaster22/Modpack-Creator.git`" OR [download zip](https://github.com/funblaster22/Modpack-Creator/archive/Main.zip)
+1. Prerequisites: have [node.js](https://nodejs.org/en/) installed
+2. Either:
+    1. Run "`git clone https://github.com/funblaster22/Modpack-Creator.git`" (requires [git](https://git-scm.com/downloads))
+    2. [Download zip](https://github.com/funblaster22/Modpack-Creator/archive/Main.zip) and extract
 3. Run "`npm install`" in the same directory as this project
+4. Run "`npm start`" and wait
