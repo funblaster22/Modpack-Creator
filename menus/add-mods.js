@@ -210,7 +210,7 @@ async function addUnknownMod(modUrl) {
   const shortName = await prompt({
     title: 'New Mod',
     label: 'Mod Name:',
-    icon: 'profile.png',
+    icon: '../build/icon.ico',
     height: 180,
     inputAttrs: {
       type: 'text', required: true

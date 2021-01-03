@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../assets/profile.jpg">
+    <link rel="icon" type="image/png" href="../build/icon.ico">
     <title>About</title>
     <script>  // SIZE: 382 by 225
 const { shell, remote, ipcRenderer } = require('electron');
@@ -57,7 +57,7 @@ h1 {
     </style>
   </head>
   <body>
-    <img src="../assets/profile.jpg" align="left" />
+    <img src="../build/icon.ico" align="left" style="image-rendering: pixelated" />
     <div>
       <h1>Auto Mod Updater</h1>
       <p id=copyright></p>

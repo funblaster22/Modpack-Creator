@@ -65,7 +65,7 @@ function newModpack() {
   prompt({
     title: 'New Modpack',
     label: 'Name:',
-    icon: 'assets/profile.jpg',
+    icon: 'build/icon.ico',
     height: 180,
     inputAttrs: {
         type: 'text', required: true
