@@ -9,7 +9,7 @@ const PROJECTS_JSON = app.getPath('userData') + '\\projects.json';
 function createPopup (website) {
   // Create the popup window.
   let popup = new BrowserWindow({
-    icon: __dirname + '\\assets\\profile.jpg',
+    icon: __dirname + '\\build\\icon.ico',
     parent: win,
     modal: true,
     resizable: false,
@@ -35,7 +35,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     show: false,
-    icon: __dirname + '\\assets\\profile.jpg',
+    icon: __dirname + '\\build\\icon.ico',
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
@@ -262,7 +262,7 @@ ipcMain.on('progressbar', (event, arg) => {
       maxValue: arg,
       browserWindow: {
         parent: (process.defaultApp) ? undefined : win,
-        icon: __dirname + '\\assets\\profile.jpg',
+        icon: __dirname + '\\build\\icon.ico',
           webPreferences: {
             nodeIntegration: true
           }
