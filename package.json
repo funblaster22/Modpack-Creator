@@ -16,7 +16,7 @@
     "url": "https://github.com/funblaster22/Modpack-Creator.git"
   },
   "devDependencies": {
-    "electron": "^7.3.2",
+    "electron": "^9.4.0",
     "electron-builder": "^22.8.1"
   },
   "dependencies": {
