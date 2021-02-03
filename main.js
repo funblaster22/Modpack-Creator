@@ -18,7 +18,9 @@ function createPopup (website) {
     //width: 100,
     //height: 100,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false
     }
   });
 
@@ -39,7 +41,9 @@ function createWindow () {
     //backgroundColor: '#ffffff', bug black when resizing
     webPreferences: {
       nodeIntegration: true,
-      webviewTag: true
+      webviewTag: true,
+      enableRemoteModule: true,
+      contextIsolation: false
       //nativeWindowOpen: true
     }
   });

@@ -5,8 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder",
-    "test": "electron-builder --dir",
+    "build": "electron-builder --dir",
     "publish": "electron-builder -w --x64 -p always"
   },
   "author": "Ed",
@@ -16,7 +15,7 @@
     "url": "https://github.com/funblaster22/Modpack-Creator.git"
   },
   "devDependencies": {
-    "electron": "^7.3.2",
+    "electron": "^11.2.2",
     "electron-builder": "^22.8.1"
   },
   "dependencies": {
