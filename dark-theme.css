@@ -1,44 +1,47 @@
-* {
-  color: white !important;
-  scrollbar-color: rgb(69,74,77) rgb(32,35,36);
-}
+@media (prefers-color-scheme: dark) {
+  * {
+    color: white !important;
+    scrollbar-color: rgb(69, 74, 77) rgb(32, 35, 36);
+  }
 
-::-webkit-scrollbar-thumb {
-    background-color: rgb(69,74,77);
-}
-::-webkit-scrollbar {
-    background-color: rgb(32,35,36);
-}
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(69, 74, 77);
+  }
 
-a {
-  color: lightblue !important;
-}
+  ::-webkit-scrollbar {
+    background-color: rgb(32, 35, 36);
+  }
 
-body {
-  background-color: #24292e;
-}
+  a {
+    color: lightblue !important;
+  }
 
-button, input, select {
-  background-color: #222222;
-  border-color: #565656 !important;
-}
+  body {
+    background-color: #24292e;
+  }
 
-img {
-  box-shadow: black 5px 5px 10px !important;
-}
+  button, input, select {
+    background-color: #222222;
+    border-color: #565656 !important;
+  }
 
-th {
-  background-color: grey !important;
-}
+  img {
+    box-shadow: black 5px 5px 10px !important;
+  }
 
-table, td, th {
-  border: 1px solid white !important;
-}
+  th {
+    background-color: grey !important;
+  }
 
-li.search {
-  border: 1px solid white !important;
-}
+  table, td, th {
+    border: 1px solid white !important;
+  }
 
-#best-version {
-  background-color: green !important;
+  li.search {
+    border: 1px solid white !important;
+  }
+
+  #best-version {
+    background-color: green !important;
+  }
 }

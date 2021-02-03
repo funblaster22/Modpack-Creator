@@ -1,10 +1,12 @@
+//https://electronjs.org/docs/tutorial/first-app
 const electron = require('electron');
-const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = electron;  //https://electronjs.org/docs/tutorial/first-app
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog, nativeTheme } = electron;
 const { autoUpdater } = require("electron-updater");
 const ProgressBar = require('electron-progressbar');
 const fs = require("fs-extra");
 const archiver = require('archiver');
 const PROJECTS_JSON = app.getPath('userData') + '\\projects.json';
+let isDarkTheme;
 
 function createPopup (website) {
   // Create the popup window.
@@ -30,6 +32,9 @@ function createPopup (website) {
   return popup;
 }
 
+/**
+ * @type {Electron.BrowserWindow} win
+ */
 var win;
 function createWindow () {
   autoUpdater.checkForUpdatesAndNotify();
@@ -86,7 +91,11 @@ function createWindow () {
       submenu: [
         {role:'reload'},
         { label:'Toggle Theme',
-          click() { win.webContents.send('toggle-theme'); }
+          click() {
+            isDarkTheme = !isDarkTheme;
+            nativeTheme.themeSource = isDarkTheme ? 'dark' : 'light';
+            win.webContents.executeJavaScript(`localStorage.theme='${nativeTheme.themeSource}'`, true);
+          }
         },
         {
           label: 'Dev Tools',
@@ -120,6 +129,13 @@ function createWindow () {
     }
   ]);
   Menu.setApplicationMenu(menu);
+
+  win.webContents
+    .executeJavaScript('localStorage.theme', true)
+    .then(theme => {
+      isDarkTheme = theme == 'dark';
+      nativeTheme.themeSource = theme;
+    });
 
   // and load the index.html of the app.
   win.loadFile('index.html');
