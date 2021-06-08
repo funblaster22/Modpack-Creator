@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --dir",
-    "publish": "electron-builder -w --x64 -p always"
+    "publish": "electron-builder -w --x64 -p always",
+    "test": "jest --detectOpenHandles --runInBand"
   },
   "author": "Ed",
   "license": "ISC",
@@ -16,7 +17,9 @@
   },
   "devDependencies": {
     "electron": "^11.2.2",
-    "electron-builder": "^22.8.1"
+    "electron-builder": "^22.8.1",
+    "jest": "^26.6.3",
+    "spectron": "^13.0.0"
   },
   "dependencies": {
     "archiver": "^5.0.0",
